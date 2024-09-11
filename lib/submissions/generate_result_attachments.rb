@@ -10,7 +10,7 @@ module Submissions
                   'Helvetica'
                 end
 
-    SIGN_REASON = 'Signed by %<name>s with DocuSeal.co'
+    SIGN_REASON = Docuseal::DEFAULT_SIGN_REASON_NAME
 
     RTL_REGEXP = TextUtils::RTL_REGEXP
 

@@ -5,7 +5,7 @@ class SendSubmissionCompletedWebhookRequestJob
 
   sidekiq_options queue: :webhooks
 
-  USER_AGENT = 'DocuSeal.co Webhook'
+  USER_AGENT = Docuseal::WEBHOOK_USER_AGENT
 
   MAX_ATTEMPTS = 10
 

@@ -93,7 +93,7 @@
         href="https://www.docuseal.co/start"
         target="_blank"
         class="underline"
-      >DocuSeal</a> - {{ t('open_source_documents_software') }}
+      >{{ productName }}</a> - {{ t('open_source_documents_software') }}
     </div>
   </div>
 </template>
@@ -115,6 +115,10 @@ export default {
   },
   inject: ['baseUrl', 't'],
   props: {
+    productName: {
+      type: String,
+      required: true
+    },
     submitterSlug: {
       type: String,
       required: true

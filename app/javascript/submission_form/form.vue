@@ -440,6 +440,7 @@
         v-else
         :is-demo="isDemo"
         :attribution="attribution"
+        :productName="productName"
         :completed-button="completedRedirectUrl ? {} : completedButton"
         :completed-message="completedRedirectUrl ? {} : completedMessage"
         :with-send-copy-button="withSendCopyButton && !completedRedirectUrl"
@@ -689,6 +690,10 @@ export default {
       type: Boolean,
       required: false,
       default: true
+    },
+    productName: {
+      type: String,
+      required: true
     },
     language: {
       type: String,

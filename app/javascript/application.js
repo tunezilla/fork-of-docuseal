@@ -161,3 +161,9 @@ safeRegisterElement('import-list', class extends HTMLElement {
     this.appElem?.remove()
   }
 })
+
+console.log(`
+# Fork of DocuSeal (AGPL-3.0)
+The original upstream repository can be found at https://github.com/docusealco/docuseal
+The source of this fork can be viewed at https://${window.location.host}/source.tar.gz
+`);

@@ -6,19 +6,22 @@ This is a fork of https://github.com/docusealco/docuseal
 
 2d840e0c2af82a746e2eff91f4813dd5bf37e398: distribute source at /source.tar.gz
 
-60f9996fb4d57897d5d5aa6af80d9fa0d6a6262b: create default user using env vars, disable setup controller
+60f9996fb4d57897d5d5aa6af80d9fa0d6a6262b + 351730b4f8816d88f9f59eec220062ae2240e8f4: create default user using env vars, disable setup controller
 
 To use, specify env vars in this format:
 
 ```
 CREATE_DEFAULT_USER=true
-DEFAULT_USER_COMPANY_NAME=Default Company
-DEFAULT_USER_TIMEZONE=Etc/UTC
+DEFAULT_ACCOUNT_COMPANY_NAME=Default Company
+DEFAULT_ACCOUNT_TIMEZONE=Etc/UTC
+DEFAULT_ACCOUNT_ALLOW_TO_RESUBMIT=false
+DEFAULT_ACCOUNT_WITH_SIGNATURE_ID=true
+DEFAULT_ACCOUNT_COMBINE_PDF_RESULT=true
+DEFAULT_ACCOUNT_APP_URL=http://localhost:3000
 DEFAULT_USER_FIRST_NAME=First
 DEFAULT_USER_LAST_NAME=LAST
 DEFAULT_USER_EMAIL=sample@localhost
 DEFAULT_USER_PASSWORD=default
-DEFAULT_USER_APP_URL=http://localhost:3000
 ```
 
 c924e436b960861450eeffe3742b11fcf0043923: most hardcoded text containing product name can be interpolated at runtime

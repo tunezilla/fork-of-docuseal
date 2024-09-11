@@ -14,7 +14,7 @@ services:
     environment:
       - FORCE_SSL=${HOST}
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal
-      # 60f9996fb4d57897d5d5aa6af80d9fa0d6a6262b
+      # 60f9996fb4d57897d5d5aa6af80d9fa0d6a6262b + 351730b4f8816d88f9f59eec220062ae2240e8f4
       - CREATE_DEFAULT_USER=true
       - DEFAULT_ACCOUNT_COMPANY_NAME=Default Company
       - DEFAULT_ACCOUNT_TIMEZONE=Etc/UTC

@@ -37,7 +37,7 @@ services:
       - DEFAULT_META_DESC=Forked, Open source, self-hosted tool to streamline document filling and signing. Create custom PDF forms to complete and sign with an easy to use online tool.
       - DEFAULT_SIGN_REASON=Signed with Fork of DocuSeal.co
       - DEFAULT_SIGN_REASON_NAME=Signed by %<name>s with Fork of DocuSeal.co
-      #
+      # 39eada293df6907744c486021a1be948c59386ca
       - SHOW_GITHUB_BADGE=false
       - SHOW_UPGRADE_BADGE=false
       - SHOW_ATTRIBUTION=false

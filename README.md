@@ -40,3 +40,15 @@ DEFAULT_META_DESC=Forked, Open source, self-hosted tool to streamline document f
 DEFAULT_SIGN_REASON=Signed with Fork of DocuSeal.co
 DEFAULT_SIGN_REASON_NAME=Signed by %<name>s with Fork of DocuSeal.co
 ```
+
+39eada293df6907744c486021a1be948c59386ca: allow hiding Github badge, Upgrade badge, Attribution, landing page, logo
+
+To use, specify env vars in this format:
+
+```
+SHOW_GITHUB_BADGE=false
+SHOW_UPGRADE_BADGE=false
+SHOW_ATTRIBUTION=false
+SHOW_LANDING_PAGE=false
+SHOW_LOGO=false
+```

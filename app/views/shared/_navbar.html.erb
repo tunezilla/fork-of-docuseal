@@ -3,9 +3,11 @@
     <a href="<%= root_path %>" class="text-2xl font-bold items-center flex space-x-2">
       <%= render 'shared/title' %>
     </a>
+    <% if Docuseal::SHOW_GITHUB_BADGE %>
     <span class="hidden sm:inline">
       <%= render 'shared/github' %>
     </span>
+    <% end %>
   </div>
   <% if signed_in? %>
     <div class="space-x-4 flex items-center">

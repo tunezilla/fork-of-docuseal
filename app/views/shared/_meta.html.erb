@@ -9,6 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="<%= root_url %>">
 <meta property="og:site_name" content="<%= Docuseal::PRODUCT_NAME %>">
+<% if Docuseal::SHOW_LOGO %>
 <% if content_for(:disable_image_preview) %>
   <meta property="og:image" content="">
   <meta name="twitter:image" content="">
@@ -27,4 +28,5 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<% end %>
 <meta name="theme-color" content="#faf7f5">

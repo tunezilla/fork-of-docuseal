@@ -38,7 +38,7 @@ module Submitters
 
     def generate_stamp_image(submitter, with_logo: true)
       logo =
-        if with_logo
+        if with_logo && Docuseal::SHOW_LOGO
           Vips::Image.new_from_buffer(load_logo(submitter).read, '')
         else
           Vips::Image.new_from_buffer(TRANSPARENT_PIXEL, '').resize(WIDTH)

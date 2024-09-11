@@ -38,6 +38,7 @@ class DashboardController < ApplicationController
 
   def maybe_render_landing
     return if signed_in?
+    return redirect_to new_user_session_path, notice: 'Please sign in.' unless Docuseal::SHOW_LANDING_PAGE
 
     render 'pages/landing'
   end

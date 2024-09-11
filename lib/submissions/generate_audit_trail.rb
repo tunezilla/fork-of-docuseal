@@ -378,7 +378,7 @@ module Submissions
     def maybe_add_background(_canvas, _submission, _page_size); end
 
     def add_logo(column, _submission = nil)
-      column.image(PdfIcons.logo_io, width: 40, height: 40, position: :float)
+      column.image(PdfIcons.logo_io, width: 40, height: 40, position: :float) if Docuseal::SHOW_LOGO
 
       column.formatted_text([{ text: Docuseal::PRODUCT_NAME,
                                link: Docuseal::PRODUCT_URL }],

@@ -3,8 +3,8 @@ if ENV['CREATE_DEFAULT_USER'] == 'true'
   Rails.configuration.after_initialize do
     unless User.exists?
       @account = Account.new({
-        name: ENV['DEFAULT_USER_COMPANY_NAME'],
-        timezone: ENV['DEFAULT_USER_TIMEZONE'],
+        name: ENV['DEFAULT_ACCOUNT_COMPANY_NAME'],
+        timezone: ENV['DEFAULT_ACCOUNT_TIMEZONE'],
       })
       @account.timezone = Accounts.normalize_timezone(@account.timezone)
       @user = @account.users.new({
@@ -15,10 +15,22 @@ if ENV['CREATE_DEFAULT_USER'] == 'true'
       })
       @user.save
       encrypted_configs = [
-        { key: EncryptedConfig::APP_URL_KEY, value: ENV['DEFAULT_USER_APP_URL'] },
+        { key: EncryptedConfig::APP_URL_KEY, value: ENV['DEFAULT_ACCOUNT_APP_URL'] },
         { key: EncryptedConfig::ESIGN_CERTS_KEY, value: GenerateCertificate.call.transform_values(&:to_pem) }
       ]
       @account.encrypted_configs.create!(encrypted_configs)
+
+      AccountConfig.find_or_initialize_by(account: @account, key: AccountConfig::ALLOW_TO_RESUBMIT).update({
+        value: ENV['DEFAULT_ACCOUNT_ALLOW_TO_RESUBMIT'] == 'true',
+      })
+
+      AccountConfig.find_or_initialize_by(account: @account, key: AccountConfig::WITH_SIGNATURE_ID).update({
+        value: ENV['DEFAULT_ACCOUNT_WITH_SIGNATURE_ID'] == 'true',
+      })
+
+      AccountConfig.find_or_initialize_by(account: @account, key: AccountConfig::COMBINE_PDF_RESULT_KEY).update({
+        value: ENV['DEFAULT_ACCOUNT_COMBINE_PDF_RESULT'] == 'true',
+      })
 
       Docuseal.refresh_default_url_options!
     end

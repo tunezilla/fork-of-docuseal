@@ -16,13 +16,16 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal
       # 60f9996fb4d57897d5d5aa6af80d9fa0d6a6262b
       - CREATE_DEFAULT_USER=true
-      - DEFAULT_USER_COMPANY_NAME=Default Company
-      - DEFAULT_USER_TIMEZONE=Etc/UTC
+      - DEFAULT_ACCOUNT_COMPANY_NAME=Default Company
+      - DEFAULT_ACCOUNT_TIMEZONE=Etc/UTC
+      - DEFAULT_ACCOUNT_ALLOW_TO_RESUBMIT=false
+      - DEFAULT_ACCOUNT_WITH_SIGNATURE_ID=true
+      - DEFAULT_ACCOUNT_COMBINE_PDF_RESULT=true
+      - DEFAULT_ACCOUNT_APP_URL=http://localhost:3000
       - DEFAULT_USER_FIRST_NAME=First
       - DEFAULT_USER_LAST_NAME=LAST
       - DEFAULT_USER_EMAIL=sample@localhost
       - DEFAULT_USER_PASSWORD=default
-      - DEFAULT_USER_APP_URL=http://localhost:3000
       # c924e436b960861450eeffe3742b11fcf0043923
       - CONSOLE_URL=http://console.localhost:3000
       - CLOUD_URL=http://cloud.localhost:3000

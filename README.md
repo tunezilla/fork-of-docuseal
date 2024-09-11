@@ -61,3 +61,7 @@ SHOW_ATTRIBUTION=false
 SHOW_LANDING_PAGE=false
 SHOW_LOGO=false
 ```
+
+---
+
+836fc60196ea285c35520839f3e325794b52df67 Acroform text fields with the name "Initials" are parsed as initials fields

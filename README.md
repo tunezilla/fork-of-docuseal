@@ -4,9 +4,11 @@ This is a fork of https://github.com/docusealco/docuseal
 
 ## Changes
 
-2d840e0c2af82a746e2eff91f4813dd5bf37e398: distribute source at /source.tar.gz
+2d840e0c2af82a746e2eff91f4813dd5bf37e398 distribute source at /source.tar.gz
 
-60f9996fb4d57897d5d5aa6af80d9fa0d6a6262b + 351730b4f8816d88f9f59eec220062ae2240e8f4: create default user using env vars, disable setup controller
+---
+
+60f9996fb4d57897d5d5aa6af80d9fa0d6a6262b + 351730b4f8816d88f9f59eec220062ae2240e8f4 create default user using env vars, disable setup controller
 
 To use, specify env vars in this format:
 
@@ -24,7 +26,9 @@ DEFAULT_USER_EMAIL=sample@localhost
 DEFAULT_USER_PASSWORD=default
 ```
 
-c924e436b960861450eeffe3742b11fcf0043923: most hardcoded text containing product name can be interpolated at runtime
+---
+
+c924e436b960861450eeffe3742b11fcf0043923 most hardcoded text containing product name can be interpolated at runtime
 
 To use, specify env vars in this format:
 
@@ -44,7 +48,9 @@ DEFAULT_SIGN_REASON=Signed with Fork of DocuSeal.co
 DEFAULT_SIGN_REASON_NAME=Signed by %<name>s with Fork of DocuSeal.co
 ```
 
-39eada293df6907744c486021a1be948c59386ca: allow hiding Github badge, Upgrade badge, Attribution, landing page, logo
+---
+
+39eada293df6907744c486021a1be948c59386ca allow hiding Github badge, Upgrade badge, Attribution, landing page, logo
 
 To use, specify env vars in this format:
 

@@ -9,7 +9,8 @@ class ApplicationController < ActionController::Base
   check_authorization unless: :devise_controller?
 
   before_action :sign_in_for_demo, if: -> { Docuseal.demo? }
-  before_action :maybe_redirect_to_setup, unless: :signed_in?
+  # setup_controller disabled in fork
+  # before_action :maybe_redirect_to_setup, unless: :signed_in?
   before_action :authenticate_user!, unless: :devise_controller?
 
   helper_method :button_title,

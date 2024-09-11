@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 class SetupController < ApplicationController
-  skip_before_action :maybe_redirect_to_setup
+  # setup_controller disabled in fork
+  # skip_before_action :maybe_redirect_to_setup
   skip_before_action :authenticate_user!
   skip_authorization_check
 
+  # setup_controller disabled in fork
+  before_action :controller_disabled!
   before_action :redirect_to_root_if_signed, if: :signed_in?
   before_action :ensure_first_user_not_created!
 
@@ -63,6 +66,12 @@ class SetupController < ApplicationController
     return {} unless params[:encrypted_config]
 
     params.require(:encrypted_config).permit(:value)
+  end
+
+  # setup_controller disabled in fork
+  def controller_disabled!
+    redirect_to new_user_session_path, notice: 'Please sign in.' if User.exists?
+    redirect_to new_user_session_path, notice: 'The setup controller is not enabled.'
   end
 
   def redirect_to_root_if_signed

@@ -157,6 +157,11 @@ module Templates
           type: 'cells',
           default_value: field.field_value
         }
+      elsif field.field_type == :Tx && field_name == 'Initials'
+        {
+          **attrs,
+          type: 'initials'
+        }
       elsif field.field_type == :Tx
         {
           **attrs,

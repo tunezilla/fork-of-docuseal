@@ -18,7 +18,7 @@ This fork does **not** strive to be secure, functional, production-ready, suppor
 
 ---
 
-60f9996fb4d57897d5d5aa6af80d9fa0d6a6262b + 351730b4f8816d88f9f59eec220062ae2240e8f4 + 25668515aa2ca9f268d7bad536dd11caa9965bca create default user using env vars, disable setup controller
+60f9996fb4d57897d5d5aa6af80d9fa0d6a6262b + 351730b4f8816d88f9f59eec220062ae2240e8f4 + 25668515aa2ca9f268d7bad536dd11caa9965bca + 60cd46d81a0f6aca7ce73c0bce8bb893aca09818 create default user using env vars, disable setup controller
 
 To use, specify env vars in this format:
 
@@ -30,7 +30,7 @@ DEFAULT_ACCOUNT_ALLOW_TO_RESUBMIT=false
 DEFAULT_ACCOUNT_WITH_SIGNATURE_ID=true
 DEFAULT_ACCOUNT_COMBINE_PDF_RESULT=true
 DEFAULT_ACCOUNT_APP_URL=http://localhost:3000
-DEFAULT_ACCOUNT_WEBHOOK_URL=http://receiver.localhost:3000 # optional
+DEFAULT_ACCOUNT_WEBHOOK_URL=http://receiver.localhost:3000 # optional, 60cd46d81a0f6aca7ce73c0bce8bb893aca09818
 DEFAULT_USER_FIRST_NAME=First
 DEFAULT_USER_LAST_NAME=LAST
 DEFAULT_USER_EMAIL=sample@localhost

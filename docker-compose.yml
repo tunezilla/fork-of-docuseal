@@ -28,7 +28,7 @@ services:
       - DEFAULT_USER_PASSWORD=default
       # 25668515aa2ca9f268d7bad536dd11caa9965bca
       - DEFAULT_USER_ACCESS_TOKEN=some-token-here
-      #
+      # 60cd46d81a0f6aca7ce73c0bce8bb893aca09818
       - DEFAULT_ACCOUNT_WEBHOOK_URL=http://receiver.localhost:3000
       # c924e436b960861450eeffe3742b11fcf0043923
       - CONSOLE_URL=http://console.localhost:3000

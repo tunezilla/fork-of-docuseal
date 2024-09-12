@@ -48,7 +48,7 @@ services:
       - SHOW_ATTRIBUTION=false
       - SHOW_LANDING_PAGE=false
       - SHOW_LOGO=false
-      #
+      # 9517524c12d03fca4ff21073961b49f1241ab226
       - ACROFORM_SIGNATURE_FIELDS_REQUIRED=true
 
   postgres:

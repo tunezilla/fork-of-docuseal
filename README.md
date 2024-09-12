@@ -180,7 +180,7 @@ curl \
 
 ---
 
-Acroform Signature and Initials fields can be marked as required by default.
+9517524c12d03fca4ff21073961b49f1241ab226 Acroform Signature and Initials fields can be marked as required by default.
 
 To use, specify env vars in this format:
 

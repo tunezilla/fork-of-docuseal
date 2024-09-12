@@ -2,7 +2,17 @@
 
 This is a fork of https://github.com/docusealco/docuseal
 
-## Changes
+No support offered beyond this readme, sorry <3
+
+## Fork Goals
+
+In prod, a service uses AWS S3. In dev, the service uses progressive replacements instead (file drivers, https://github.com/minio/minio , etc).
+
+In prod, a service uses DocuSign. In dev, the service can use progressive replacements instead (a stub, this fork, etc).
+
+This fork does **not** strive to be secure, functional, production-ready, supported, or API-compatible with any other offerings. Instead, this fork is insecure, broken, development-ready, unsupported, and API-incompatible with other offerings.
+
+## Fork Changes
 
 2d840e0c2af82a746e2eff91f4813dd5bf37e398 distribute source at /source.tar.gz
 

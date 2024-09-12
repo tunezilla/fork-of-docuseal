@@ -23,7 +23,7 @@ services:
       - DEFAULT_ACCOUNT_COMBINE_PDF_RESULT=true
       - DEFAULT_ACCOUNT_APP_URL=http://localhost:3000
       - DEFAULT_USER_FIRST_NAME=First
-      - DEFAULT_USER_LAST_NAME=LAST
+      - DEFAULT_USER_LAST_NAME=Last
       - DEFAULT_USER_EMAIL=sample@localhost
       - DEFAULT_USER_PASSWORD=default
       # c924e436b960861450eeffe3742b11fcf0043923

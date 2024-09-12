@@ -12,7 +12,7 @@ This is a fork of https://github.com/docusealco/docuseal
 
 To use, specify env vars in this format:
 
-```
+```sh
 CREATE_DEFAULT_USER=true
 DEFAULT_ACCOUNT_COMPANY_NAME=Default Company
 DEFAULT_ACCOUNT_TIMEZONE=Etc/UTC
@@ -32,7 +32,7 @@ c924e436b960861450eeffe3742b11fcf0043923 most hardcoded text containing product 
 
 To use, specify env vars in this format:
 
-```
+```sh
 CONSOLE_URL=http://console.localhost:3000
 CLOUD_URL=http://cloud.localhost:3000
 CDN_URL=http://cdn.localhost:3000
@@ -54,7 +54,7 @@ DEFAULT_SIGN_REASON_NAME=Signed by %<name>s with Fork of DocuSeal.co
 
 To use, specify env vars in this format:
 
-```
+```sh
 SHOW_GITHUB_BADGE=false
 SHOW_UPGRADE_BADGE=false
 SHOW_ATTRIBUTION=false
@@ -65,3 +65,104 @@ SHOW_LOGO=false
 ---
 
 836fc60196ea285c35520839f3e325794b52df67 Acroform text fields with the name "Initials" are parsed as initials fields
+
+---
+
+Upload PDFs as templates over the API
+
+To use:
+
+```sh
+B64=$(cat some.pdf | base64 -w 0)
+echo "{\"file_name\":\"optional_file_name.pdf\",\"file_b64\":\"$B64\"}" > request.json
+curl \
+  -X POST \
+  -H "X-Auth-Token: $MY_AUTH_TOKEN_HERE" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  "http://localhost:3000/api_fork/templates" \
+  --data-binary @request.json
+
+# sample output:
+# {
+#   "id": 1,
+#   "slug": "rJaErPQ7rLMmrd",
+#   "name": "optional_file_name",
+#   "schema": [
+#     {
+#       "attachment_uuid": "184b348b-1751-4631-80f3-7d3c7e664518",
+#       "name": "optional_file_name",
+#       "pending_fields": true
+#     }
+#   ],
+#   "fields": [
+#     {
+#       "uuid": "4b918248-fff5-48c0-bde9-60d695adc9b6",
+#       "required": false,
+#       "preferences": {},
+#       "areas": [
+#         {
+#           "page": 123,
+#           "x": 0.611832158528145,
+#           "y": 0.6663091377733432,
+#           "w": 0.245264381564182,
+#           "h": 0.08789746879045952,
+#           "attachment_uuid": "184b348b-1751-4631-80f3-7d3c7e664518"
+#         }
+#       ],
+#       "name": "Signature",
+#       "type": "signature",
+#       "submitter_uuid": "9d07f55d-1056-4469-9d1a-8c3a22560a1c"
+#     },
+#     {
+#       "uuid": "999a2369-7550-4b20-820a-49fbe8ae146e",
+#       "required": false,
+#       "preferences": {},
+#       "areas": [
+#         {
+#           "page": 456,
+#           "x": 0.7755746914036514,
+#           "y": 0.9470239579992635,
+#           "w": 0.1001216242549674,
+#           "h": 0.02803335352599508,
+#           "attachment_uuid": "184b348b-1751-4631-80f3-7d3c7e664518"
+#         }
+#       ],
+#       "name": "Initials",
+#       "type": "initials",
+#       "submitter_uuid": "9d07f55d-1056-4469-9d1a-8c3a22560a1c"
+#     }
+#   ],
+#   "submitters": [
+#     {
+#       "name": "First Party",
+#       "uuid": "9d07f55d-1056-4469-9d1a-8c3a22560a1c"
+#     }
+#   ],
+#   "author_id": 1,
+#   "archived_at": null,
+#   "created_at": "2024-09-12T17:29:37.146Z",
+#   "updated_at": "2024-09-12T17:29:38.139Z",
+#   "source": "api",
+#   "folder_id": 2,
+#   "external_id": null,
+#   "preferences": {},
+#   "application_key": null,
+#   "folder_name": "API",
+#   "author": {
+#     "id": 1,
+#     "first_name": "First",
+#     "last_name": "Last",
+#     "email": "sample@localhost"
+#   },
+#   "documents": [
+#     {
+#       "id": 1,
+#       "uuid": "184b348b-1751-4631-80f3-7d3c7e664518",
+#       "url": "http://localhost:3000/file/snipped/optional_file_name.pdf",
+#       "preview_image_url": "http://localhost:3000/file/snipped/0.jpg",
+#       "filename": "optional_file_name.pdf"
+#     }
+#   ]
+# }
+```

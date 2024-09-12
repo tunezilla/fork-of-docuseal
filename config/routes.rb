@@ -27,6 +27,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :api_fork do
+    resources :templates, only: %i[create], controller: 'templates_uploads'
+  end
+
   namespace :api, defaults: { format: :json } do
     resource :user, only: %i[show]
     resources :attachments, only: %i[create]

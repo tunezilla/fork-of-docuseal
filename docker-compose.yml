@@ -48,6 +48,8 @@ services:
       - SHOW_ATTRIBUTION=false
       - SHOW_LANDING_PAGE=false
       - SHOW_LOGO=false
+      #
+      - ACROFORM_SIGNATURE_FIELDS_REQUIRED=true
 
   postgres:
     image: postgres:15

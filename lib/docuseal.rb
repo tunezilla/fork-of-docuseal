@@ -22,6 +22,7 @@ module Docuseal
   DEFAULT_META_DESC = ENV.fetch('DEFAULT_META_DESC', 'Open source, self-hosted tool to streamline document filling and signing. Create custom PDF forms to complete and sign with an easy to use online tool.')
   DEFAULT_SIGN_REASON = ENV.fetch('DEFAULT_SIGN_REASON', 'Signed with DocuSeal.co')
   DEFAULT_SIGN_REASON_NAME = ENV.fetch('DEFAULT_SIGN_REASON_NAME', 'Signed by %<name>s with DocuSeal.co')
+  ACROFORM_SIGNATURE_FIELDS_REQUIRED = ENV['ACROFORM_SIGNATURE_FIELDS_REQUIRED'] == 'true'
   SHOW_GITHUB_BADGE = ENV['SHOW_GITHUB_BADGE'] != 'false'
   SHOW_UPGRADE_BADGE = ENV['SHOW_UPGRADE_BADGE'] != 'false'
   SHOW_ATTRIBUTION = ENV['SHOW_ATTRIBUTION'] != 'false'

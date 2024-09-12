@@ -177,3 +177,13 @@ curl \
 #   ]
 # }
 ```
+
+---
+
+Acroform Signature and Initials fields can be marked as required by default.
+
+To use, specify env vars in this format:
+
+```sh
+ACROFORM_SIGNATURE_FIELDS_REQUIRED=true
+```

@@ -160,7 +160,8 @@ module Templates
       elsif field.field_type == :Tx && field_name == 'Initials'
         {
           **attrs,
-          type: 'initials'
+          type: 'initials',
+          required: Docuseal::ACROFORM_SIGNATURE_FIELDS_REQUIRED
         }
       elsif field.field_type == :Tx
         {
@@ -171,7 +172,8 @@ module Templates
       elsif field.field_type == :Sig
         {
           **attrs,
-          type: 'signature'
+          type: 'signature',
+          required: Docuseal::ACROFORM_SIGNATURE_FIELDS_REQUIRED
         }
       else
         {}

@@ -9,21 +9,7 @@ module ApiFork
     def show; end
 
     def create
-      # note to reader:
-      # I originally wanted to upload files using multipart/form-data here,
-      # but I couldn't get it to work (request always parsed as JSON -> JSON parse error)
-      # I'm not familiar with Ruby or Rails, so I shoved the file into JSON as b64 and made it work
-      tempfile = Tempfile.new
-      tempfile.binmode
-      tempfile.write(Base64.decode64(params[:file_b64]))
-      tempfile.rewind
-
-      file = ActionDispatch::Http::UploadedFile.new(
-        tempfile: tempfile,
-        filename: params[:file_name] || 'file.pdf',
-        type: PDF_CONTENT_TYPE,
-      )
-      params[:files] = [file]
+      url_params = create_file_params_from_url if params[:url].present?
 
       save_template!(@template, params)
 
@@ -51,16 +37,33 @@ module ApiFork
 
     private
 
-    def save_template!(template, params)
+    def save_template!(template, url_params)
       template.account = current_account
       template.author = current_user
       template.folder = TemplateFolders.find_or_create_by_name(current_user, params[:folder_name] || 'API')
-      template.name = File.basename((params)[:files].first.original_filename, '.*')
+      template.name = File.basename((url_params || params)[:files].first.original_filename, '.*')
       template.source = :api
 
       template.save!
 
       template
+    end
+
+    def create_file_params_from_url
+      tempfile = Tempfile.new
+      tempfile.binmode
+      tempfile.write(DownloadUtils.call(params[:url]).body)
+      tempfile.rewind
+
+      file = ActionDispatch::Http::UploadedFile.new(
+        tempfile:,
+        filename: File.basename(
+          URI.decode_www_form_component(params[:filename].presence || params[:url]), '.*'
+        ),
+        type: Marcel::MimeType.for(tempfile)
+      )
+
+      { files: [file] }
     end
   end
 end

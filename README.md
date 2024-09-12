@@ -84,15 +84,13 @@ SHOW_LOGO=false
 To use:
 
 ```sh
-B64=$(cat some.pdf | base64 -w 0)
-echo "{\"file_name\":\"optional_file_name.pdf\",\"file_b64\":\"$B64\"}" > request.json
 curl \
   -X POST \
   -H "X-Auth-Token: $MY_AUTH_TOKEN_HERE" \
-  -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
   "http://localhost:3000/api_fork/templates" \
-  --data-binary @request.json
+  -F "folder_name=optional folder name here" \
+  -F "name=optional template name here" \
+  -F "files[]=@some.pdf"
 
 # sample output:
 # {

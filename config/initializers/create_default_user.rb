@@ -38,6 +38,12 @@ if ENV['CREATE_DEFAULT_USER'] == 'true'
         value: ENV['DEFAULT_ACCOUNT_COMBINE_PDF_RESULT'] == 'true',
       })
 
+      if ENV['DEFAULT_ACCOUNT_WEBHOOK_URL']
+        @encrypted_config = @account.encrypted_configs.find_or_initialize_by(key: EncryptedConfig::WEBHOOK_URL_KEY)
+        @encrypted_config.value = ENV['DEFAULT_ACCOUNT_WEBHOOK_URL']
+        @encrypted_config.save!
+      end
+
       Docuseal.refresh_default_url_options!
     end
   end

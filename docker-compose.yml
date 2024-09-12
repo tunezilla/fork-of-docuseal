@@ -26,7 +26,7 @@ services:
       - DEFAULT_USER_LAST_NAME=Last
       - DEFAULT_USER_EMAIL=sample@localhost
       - DEFAULT_USER_PASSWORD=default
-      #
+      # 25668515aa2ca9f268d7bad536dd11caa9965bca
       - DEFAULT_USER_ACCESS_TOKEN=some-token-here
       # c924e436b960861450eeffe3742b11fcf0043923
       - CONSOLE_URL=http://console.localhost:3000

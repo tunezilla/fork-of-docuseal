@@ -68,7 +68,7 @@ SHOW_LOGO=false
 
 ---
 
-Upload PDFs as templates over the API
+99075c7575643701fe83bed2f526c73e22b7941d Upload PDFs as templates over the API
 
 To use:
 

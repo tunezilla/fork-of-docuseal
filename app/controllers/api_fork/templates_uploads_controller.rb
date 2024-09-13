@@ -41,7 +41,7 @@ module ApiFork
       template.account = current_account
       template.author = current_user
       template.folder = TemplateFolders.find_or_create_by_name(current_user, params[:folder_name] || 'API')
-      template.name = File.basename((url_params || params)[:files].first.original_filename, '.*')
+      template.name = params[:name] || File.basename((url_params || params)[:files].first.original_filename, '.*')
       template.source = :api
 
       template.save!

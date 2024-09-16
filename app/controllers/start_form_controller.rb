@@ -11,7 +11,8 @@ class StartFormController < ApplicationController
 
   def show
     @submitter = @template.submissions.new(account_id: @template.account_id)
-                          .submitters.new(uuid: filter_undefined_submitters(@template).first['uuid'])
+                          .submitters.new(uuid: (filter_undefined_submitters(@template).first ||
+                                                 @template.submitters.first)['uuid'])
   end
 
   def update
@@ -22,7 +23,7 @@ class StartFormController < ApplicationController
     if @submitter.completed_at?
       redirect_to start_form_completed_path(@template.slug, email: submitter_params[:email])
     else
-      if filter_undefined_submitters(@template).size > 2 && @submitter.new_record?
+      if filter_undefined_submitters(@template).size > 1 && @submitter.new_record?
         @error_message = 'Not found'
 
         return render :show
@@ -68,7 +69,7 @@ class StartFormController < ApplicationController
       (Submitter.where(submission: template.submissions).find_by(slug: params[:resubmit]) if params[:resubmit].present?)
 
     submitter.assign_attributes(
-      uuid: filter_undefined_submitters(template).first['uuid'],
+      uuid: (filter_undefined_submitters(template).first || @template.submitters.first)['uuid'],
       ip: request.remote_ip,
       ua: request.user_agent,
       values: resubmit_submitter&.preferences&.fetch('default_values', nil) || {},
@@ -94,9 +95,7 @@ class StartFormController < ApplicationController
   end
 
   def filter_undefined_submitters(template)
-    template.submitters.select do |item|
-      item['linked_to_uuid'].blank? && item['is_requester'].blank? && item['email'].blank?
-    end
+    Templates.filter_undefined_submitters(template)
   end
 
   def submitter_params

@@ -43,7 +43,7 @@
             <% else %>
               <div class="tooltip flex" data-tip="<%= l(submitter.status_event_at.in_time_zone(current_account.timezone), format: :short, locale: current_account.locale) %>">
                 <span class="badge <%= status_badges[submitter.status] %> md:w-32 badge-lg bg-opacity-50 uppercase text-sm font-semibold">
-                  <%= submitter.status %>
+                  <%= t(submitter.status) %>
                 </span>
               </div>
             <% end %>
@@ -58,7 +58,7 @@
           <form onsubmit="event.preventDefault()" class="flex-1 md:flex-none">
             <button onclick="event.stopPropagation()" class="w-full md:w-fit">
               <download-button data-src="<%= submitter_download_index_path(submitter.slug) %>" class="btn btn-sm btn-neutral text-white w-full md:w-36">
-                <span class="flex items-center justify-center space-x-1 md:space-x-2" data-target="download-button.defaultButton">
+                <span class="flex items-center justify-center space-x-1 <%= 'md:space-x-2' if t('download').length < 11 %>" data-target="download-button.defaultButton">
                   <%= svg_icon('download', class: 'w-5 h-5 stroke-2') %>
                   <span class="inline"><%= t('download') %></span>
                 </span>
@@ -74,14 +74,16 @@
             <form data-turbo="false" method="get" action="<%= submit_form_url(slug: submitter.slug) %>" class="flex-1 md:flex-none">
               <button onclick="event.stopPropagation()" class="btn btn-sm btn-neutral btn-outline bg-white w-full md:w-36 flex">
                 <span class="flex items-center justify-center space-x-1 md:space-x-2">
-                  <%= svg_icon('writing_sign', class: 'w-4 h-4 stroke-2') %>
+                  <% if t('sign_now').length < 12 %>
+                    <%= svg_icon('writing_sign', class: 'w-4 h-4 stroke-2') %>
+                  <% end %>
                   <span class="inline shrink-0"><%= t('sign_now') %></span>
                 </span>
               </button>
             </form>
           <% else %>
             <div class="flex-1 md:flex-none">
-              <%= render 'shared/clipboard_copy', text: submit_form_url(slug: submitter.slug), class: 'btn btn-sm btn-neutral text-white md:w-36 flex', icon_class: 'w-6 h-6 text-white', copy_title: 'Copy Link', copy_title_md: t('copy'), copied_title_md: t('copied') %>
+              <%= render 'shared/clipboard_copy', text: submit_form_url(slug: submitter.slug), class: 'btn btn-sm btn-neutral text-white md:w-36 flex', icon_class: 'w-6 h-6 text-white', copy_title: t('copy_link').length < 10 ? t('copy_link') : t('copy'), copy_title_md: t('copy'), copied_title_md: t('copied') %>
             </div>
           <% end %>
         <% end %>
@@ -106,7 +108,7 @@
             <% latest_submitter = submitters.select(&:completed_at?).max_by(&:completed_at) %>
             <div class="tooltip flex" data-tip="<%= l(latest_submitter.status_event_at.in_time_zone(current_account.timezone), format: :short, locale: current_account.locale) %>">
               <span class="badge <%= status_badges[latest_submitter.status] %> md:w-32 bg-opacity-50 badge-lg uppercase text-sm font-semibold">
-                <%= latest_submitter.status %>
+                <%= t(latest_submitter.status) %>
               </span>
             </div>
           <% elsif submission.expired? %>
@@ -123,7 +125,7 @@
                   <% if !is_submission_completed && !submission.expired? %>
                     <div class="tooltip flex" data-tip="<%= l(submitter.status_event_at.in_time_zone(current_account.timezone), format: :short, locale: current_account.locale) %>">
                       <span class="badge md:w-24 <%= status_badges[submitter.status] %> bg-opacity-50 uppercase text-xs font-semibold">
-                        <%= submitter.status %>
+                        <%= t(submitter.status) %>
                       </span>
                     </div>
                   <% end %>
@@ -152,13 +154,15 @@
                       <form data-turbo="false" method="get" action="<%= submit_form_url(slug: submitter.slug) %>">
                         <button onclick="event.stopPropagation()" class="absolute md:relative top-0 right-0 btn btn-xs btn-outline btn-neutral bg-white w-28 md:w-36">
                           <span class="flex items-center justify-center space-x-1 md:space-x-2">
-                            <%= svg_icon('writing_sign', class: 'w-4 h-4 stroke-2') %>
+                            <% if t('sign_now').length < 12 %>
+                              <%= svg_icon('writing_sign', class: 'w-4 h-4 stroke-2') %>
+                            <% end %>
                             <span class="inline shrink-0"><%= t('sign_now') %></span>
                           </span>
                         </button>
                       </form>
                     <% else %>
-                      <%= render 'shared/clipboard_copy', text: submit_form_url(slug: submitter.slug), class: 'absolute md:relative top-0 right-0 btn btn-xs text-xs btn-neutral text-white w-28 md:w-36 flex', icon_class: 'w-4 h-4 text-white', copy_title: 'Copy Link', copy_title_md: 'Copy Link', copied_title_md: t('copied') %>
+                      <%= render 'shared/clipboard_copy', text: submit_form_url(slug: submitter.slug), class: 'absolute md:relative top-0 right-0 btn btn-xs text-xs btn-neutral text-white w-28 md:w-36 flex', icon_class: 'w-4 h-4 text-white', copy_title: t('copy_link'), copy_title_md: t('copy_link').length < 10 ? t('copy_link') : t('copy'), copied_title_md: t('copied') %>
                     <% end %>
                   </div>
                 <% end %>
@@ -172,8 +176,8 @@
           <% latest_submitter = submitters.select(&:completed_at?).max_by(&:completed_at) %>
           <div class="flex-1 md:flex-none">
             <form onsubmit="event.preventDefault()" class="w-full md:w-fit">
-              <button onclick="event.stopPropagation()">
-                <download-button data-src="<%= submitter_download_index_path(latest_submitter.slug) %>" class="btn btn-sm btn-neutral text-white md:w-36">
+              <button onclick="event.stopPropagation()" class="w-full">
+                <download-button data-src="<%= submitter_download_index_path(latest_submitter.slug) %>" class="btn btn-sm btn-neutral text-white w-full md:w-36">
                   <span class="flex items-center justify-center space-x-1 md:space-x-2" data-target="download-button.defaultButton">
                     <%= svg_icon('download', class: 'w-5 h-5 stroke-2') %>
                     <span class="inline"><%= t('download') %></span>

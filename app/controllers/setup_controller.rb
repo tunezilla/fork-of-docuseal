@@ -59,7 +59,7 @@ class SetupController < ApplicationController
   def account_params
     return {} unless params[:account]
 
-    params.require(:account).permit(:name, :timezone)
+    params.require(:account).permit(:name, :timezone, :locale)
   end
 
   def encrypted_config_params

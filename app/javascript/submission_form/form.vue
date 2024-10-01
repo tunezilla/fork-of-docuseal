@@ -1188,10 +1188,6 @@ export default {
             return Promise.reject(new Error(data.error))
           }
 
-          if (isLastStep) {
-            this.isSecondWalkthrough = true
-          }
-
           const nextStep = (isLastStep && emptyRequiredField) || this.stepFields[this.currentStep + 1]
 
           if (nextStep) {
@@ -1216,7 +1212,7 @@ export default {
         })
       }).catch(error => {
         if (error?.message === 'Image too small') {
-          alert('Signature is too small - please redraw.')
+          alert(this.t('signature_is_too_small_please_redraw'))
         } else {
           console.log(error)
         }

@@ -127,7 +127,7 @@ module Submissions
                   TESTING_FOOTER
                 end
               else
-                "Document ID: #{document_id}"
+                "#{I18n.t('document_id', locale: submitter.account.locale)}: #{document_id}"
               end
 
             text = HexaPDF::Layout::TextFragment.create(
@@ -224,11 +224,12 @@ module Submissions
             reason_value = submitter.values[field.dig('preferences', 'reason_field_uuid')].presence
 
             reason_string =
-              "#{I18n.t('reason')}: #{reason_value || I18n.t('digitally_signed_by')} " \
-              "#{submitter.name}#{submitter.email.present? ? " <#{submitter.email}>" : ''}\n" \
-              "#{I18n.l(attachment.created_at.in_time_zone(submitter.account.timezone),
-                        format: :long, locale: submitter.account.locale)} " \
-              "#{TimeUtils.timezone_abbr(submitter.account.timezone, attachment.created_at)}"
+              I18n.with_locale(submitter.account.locale) do
+                "#{I18n.t('reason')}: #{reason_value || I18n.t('digitally_signed_by')} " \
+                  "#{submitter.name}#{submitter.email.present? ? " <#{submitter.email}>" : ''}\n" \
+                  "#{I18n.l(attachment.created_at.in_time_zone(submitter.account.timezone), format: :long)} " \
+                  "#{TimeUtils.timezone_abbr(submitter.account.timezone, attachment.created_at)}"
+              end
 
             reason_text = HexaPDF::Layout::TextFragment.create(reason_string,
                                                                font:,
@@ -340,7 +341,8 @@ module Submissions
             if field['type'].in?(%w[multiple radio])
               option = field['options']&.find { |o| o['uuid'] == area['option_uuid'] }
 
-              option_name = option['value'].presence || "Option #{field['options'].index(option) + 1}"
+              option_name = option['value'].presence
+              option_name ||= "#{I18n.t('option', locale: account.locale)} #{field['options'].index(option) + 1}"
 
               value = Array.wrap(value).include?(option_name)
             end
@@ -456,6 +458,8 @@ module Submissions
           reason: sign_reason,
           **build_signing_params(submitter, pkcs, tsa_url)
         }
+
+        pdf.pages.first[:Annots] = [] unless pdf.pages.first[:Annots].respond_to?(:<<)
 
         begin
           pdf.sign(io, write_options: { validate: false }, **sign_params)

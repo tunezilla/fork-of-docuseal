@@ -332,7 +332,7 @@
         >
           <div class="bg-base-200 rounded-lg p-5 text-center space-y-4">
             <p>
-              {{ t('draw_field_on_the_document').replace('{field}', drawField?.name || '') }}
+              {{ t('draw_field_on_the_document') }}
             </p>
             <div>
               <button
@@ -1355,7 +1355,7 @@ export default {
       this.save()
     },
     onDocumentRemove (item) {
-      if (window.confirm(this.t('are_you_sure'))) {
+      if (window.confirm(this.t('are_you_sure_'))) {
         this.template.schema.splice(this.template.schema.indexOf(item), 1)
       }
 

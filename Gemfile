@@ -23,7 +23,6 @@ gem 'image_processing'
 gem 'jwt'
 gem 'lograge'
 gem 'mysql2', require: false
-gem 'net-smtp', '0.4.0'
 gem 'oj'
 gem 'pagy'
 gem 'pg', require: false
@@ -40,7 +39,7 @@ gem 'ruby-vips'
 gem 'rubyXL'
 gem 'shakapacker'
 gem 'sidekiq'
-gem 'sqlite3', require: false, force_ruby_platform: true
+gem 'sqlite3', require: false
 gem 'strip_attributes'
 gem 'turbo-rails'
 gem 'twitter_cldr', require: false

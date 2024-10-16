@@ -115,7 +115,7 @@
             v-model="values[currentField.uuid]"
             :show-field-names="showFieldNames"
             :field="currentField"
-            @submit="submitStep"
+            @submit="!isSubmitting && submitStep()"
             @focus="scrollIntoField(currentField)"
           />
           <div v-else-if="currentField.type === 'select'">
@@ -152,6 +152,7 @@
               dir="auto"
               :required="currentField.required"
               class="select base-input !text-2xl w-full text-center font-normal"
+              :class="{ 'text-gray-300': !values[currentField.uuid] }"
               :name="`values[${currentField.uuid}]`"
               @change="values[currentField.uuid] = $event.target.value"
               @focus="scrollIntoField(currentField)"
@@ -159,6 +160,7 @@
               <option
                 value=""
                 :selected="!values[currentField.uuid]"
+                class="text-gray-300"
               >
                 {{ t('select_your_option') }}
               </option>
@@ -167,6 +169,7 @@
                 :key="option.uuid"
                 :selected="values[currentField.uuid] == option.value"
                 :value="option.value"
+                class="text-base-content"
               >
                 {{ option.value }}
               </option>
@@ -392,7 +395,7 @@
             :default-value="submitter.phone"
             :submitter-slug="submitterSlug"
             @focus="scrollIntoField(currentField)"
-            @submit="submitStep"
+            @submit="!isSubmitting && submitStep()"
           />
           <PaymentStep
             v-else-if="currentField.type === 'payment'"
@@ -404,7 +407,7 @@
             :values="values"
             @attached="attachments.push($event)"
             @focus="scrollIntoField(currentField)"
-            @submit="submitStep"
+            @submit="!isSubmitting && submitStep()"
           />
         </div>
         <div
@@ -902,7 +905,7 @@ export default {
   mounted () {
     this.submittedValues = JSON.parse(JSON.stringify(this.values))
 
-    screen?.orientation.addEventListener('change', this.onOrientationChange)
+    screen?.orientation?.addEventListener('change', this.onOrientationChange)
 
     this.fields.forEach((field) => {
       if (field.default_value && !field.readonly) {
@@ -1147,13 +1150,15 @@ export default {
     async submitStep () {
       this.isSubmitting = true
 
+      const submitStep = this.currentStep
+
       const stepPromise = ['signature', 'phone', 'initials', 'payment'].includes(this.currentField.type)
         ? this.$refs.currentStep.submit
         : () => Promise.resolve({})
 
       stepPromise().then(async () => {
         const emptyRequiredField = this.stepFields.find((fields, index) => {
-          if (index >= this.currentStep) {
+          if (index >= submitStep) {
             return false
           }
 
@@ -1163,7 +1168,7 @@ export default {
         })
 
         const formData = new FormData(this.$refs.form)
-        const isLastStep = this.currentStep === this.stepFields.length - 1
+        const isLastStep = submitStep === this.stepFields.length - 1
 
         if (isLastStep && !emptyRequiredField && !this.inviteSubmitters.length) {
           formData.append('completed', 'true')
@@ -1188,7 +1193,7 @@ export default {
             return Promise.reject(new Error(data.error))
           }
 
-          const nextStep = (isLastStep && emptyRequiredField) || this.stepFields[this.currentStep + 1]
+          const nextStep = (isLastStep && emptyRequiredField) || this.stepFields[submitStep + 1]
 
           if (nextStep) {
             if (this.alwaysMinimize) {

@@ -22,6 +22,10 @@ en: &en
   thanks: Thanks
   first_party: 'First Party'
   docuseal_trusted_signature: DocuSeal Trusted Signature
+  hello_name: Hello %{name}
+  you_are_invited_to_product_name: You are invited to %{product_name}
+  you_have_been_invited_to_account_name_product_name_please_sign_up_using_the_link_below_: 'You have been invited to %{account_name} %{product_name}. Please sign up using the link below:'
+  sent_using_product_name_free_document_signing_html: 'Sent using <a href="%{product_url}">%{product_name}</a> free document signing.'
   sign_documents_with_trusted_certificate_provided_by_docu_seal_your_documents_and_data_are_never_shared_with_docu_seal_p_d_f_checksum_is_provided_to_generate_a_trusted_signature: Sign documents with trusted certificate provided by DocuSeal. Your documents and data are never shared with DocuSeal. PDF checksum is provided to generate a trusted signature.
   you_have_been_invited_to_submit_the_name_form: 'You have been invited to submit the "%{name}" form.'
   you_have_been_invited_to_sign_the_name: 'You have been invited to sign the "%{name}".'
@@ -577,6 +581,57 @@ en: &en
   opened: Opened
   sent: Sent
   awaiting: Awaiting
+  document_id: Document ID
+  envelope_id: Envelope ID
+  event_log: Event Log
+  verify: Verify
+  testing_log_not_for_production_use: Testing Log - Not for Production Use
+  original_sha256: Original SHA256
+  result_sha256: Result SHA256
+  generated_at: Generated at
+  email_verification: Email verification
+  phone_verification: Phone verification
+  session_id: Session ID
+  option: Option
+  text_field: Text Field
+  signature_field: Signature Field
+  initials_field: Initials Field
+  date_field: Date Field
+  number_field: Number Field
+  image_field: Image Field
+  file_field: File Field
+  select_field: Select Field
+  checkbox_field: Checkbox Field
+  multiple_field: Multiple Select Field
+  radio_field: Radio Group Field
+  cells_field: Cells Field
+  stamp_field: Stamp Field
+  payment_field: Payment Field
+  phone_field: Phone Field
+  paid_price: 'Paid %{price}'
+  verified: Verified
+  unverified: Unverified
+  document: Document
+  completed_at: Completed At
+  edit_recipient: Edit Recipient
+  update_recipient: Update Recipient
+  use_international_format_1xxx_: 'Use internatioanl format: +1xxx...'
+  submitter_cannot_be_updated: Submitter cannot be updated.
+  at_least_one_field_must_be_filled: At least one field must be filled.
+  submission_event_names:
+    send_email_to_html: '<b>Email sent</b> to %{submitter_name}'
+    send_reminder_email_to_html: '<b>Reminder email sent</b> to %{submitter_name}'
+    send_sms_to_html: '<b>SMS sent</b> to %{submitter_name}'
+    send_2fa_sms_to_html: '<b>Verification SMS sent</b> to %{submitter_name}'
+    open_email_by_html: '<b>Email opened</b> by %{submitter_name}'
+    click_email_by_html: '<b>Email link clicked</b> by %{submitter_name}'
+    click_sms_by_html: '<b>SMS link clicked</b> by %{submitter_name}'
+    phone_verified_by_html: '<b>Phone verified</b> by %{submitter_name}'
+    start_form_by_html: '<b>Submission started</b> by %{submitter_name}'
+    view_form_by_html: '<b>Form viewed</b> by %{submitter_name}'
+    invite_party_by_html: '<b>Invited</b> %{invited_submitter_name} by %{submitter_name}'
+    complete_form_by_html: '<b>Submission completed</b> by %{submitter_name}'
+    api_complete_form_by_html: '<b>Submission completed via API</b> by %{submitter_name}'
   import_list:
     select_worksheet: Select Worksheet
     open: Open
@@ -603,6 +658,10 @@ es: &es
   enforce_recipients_order: 'Hacer cumplir el orden de los destinatarios'
   first_party: 'Primera Parte'
   docuseal_trusted_signature: Firma de confianza DocuSeal
+  hello_name: Hola %{name}
+  you_are_invited_to_product_name: Estás invitado a %{product_name}
+  you_have_been_invited_to_account_name_product_name_please_sign_up_using_the_link_below_: 'Has sido invitado a %{account_name} %{product_name}. Por favor, regístrate usando el enlace a continuación:'
+  sent_using_product_name_free_document_signing_html: 'Enviado usando la firma de documentos gratuita de <a href="%{product_url}">%{product_name}</a>.'
   sign_documents_with_trusted_certificate_provided_by_docu_seal_your_documents_and_data_are_never_shared_with_docu_seal_p_d_f_checksum_is_provided_to_generate_a_trusted_signature: Firme documentos con un certificado de confianza proporcionado por DocuSeal. Sus documentos y datos nunca se comparten con DocuSeal. Se proporciona un checksum de PDF para generar una firma de confianza.
   hi_there: Hola
   thanks: Gracias
@@ -1158,6 +1217,57 @@ es: &es
   opened: Abierto
   sent: Enviado
   awaiting: Pendiente
+  document_id: ID del Documento
+  envelope_id: ID del Sobre
+  event_log: Registro de Eventos
+  verify: Verificar
+  testing_log_not_for_production_use: Registro de Pruebas - No para Uso en Producción
+  original_sha256: SHA256 Original
+  result_sha256: SHA256 del Resultado
+  generated_at: Generado el
+  email_verification: Verificación de correo electrónico
+  phone_verification: Verificación telefónica
+  session_id: ID de la Sesión
+  option: Opción
+  text_field: Campo de Texto
+  signature_field: Campo de Firma
+  initials_field: Campo de Iniciales
+  date_field: Campo de Fecha
+  number_field: Campo de Número
+  image_field: Campo de Imagen
+  file_field: Campo de Archivo
+  select_field: Campo de Selección
+  multiple_field: Campo Múltiple
+  radio_field: Campo de Grupo Radio
+  radio_field: Campo de Radio
+  cells_field: Campo de Celdas
+  stamp_field: Campo de Sello
+  payment_field: Campo de Pago
+  phone_field: Campo de Teléfono
+  paid_price: 'Pagado %{price}'
+  verified: Verificado
+  unverified: No verificado
+  document: Documento
+  completed_at: Completado el
+  edit_recipient: Editar Destinatario
+  update_recipient: Actualizar Destinatario
+  use_international_format_1xxx_: 'Usa el formato internacional: +1xxx...'
+  submitter_cannot_be_updated: El remitente no puede ser actualizado.
+  at_least_one_field_must_be_filled: Al menos un campo debe estar completo.
+  submission_event_names:
+    send_email_to_html: '<b>Correo electrónico enviado</b> a %{submitter_name}'
+    send_reminder_email_to_html: '<b>Correo de recordatorio enviado</b> a %{submitter_name}'
+    send_sms_to_html: '<b>SMS enviado</b> a %{submitter_name}'
+    send_2fa_sms_to_html: '<b>SMS de verificación enviado</b> a %{submitter_name}'
+    open_email_by_html: '<b>Correo electrónico abierto</b> por %{submitter_name}'
+    click_email_by_html: '<b>Enlace del correo electrónico clicado</b> por %{submitter_name}'
+    click_sms_by_html: '<b>Enlace del SMS clicado</b> por %{submitter_name}'
+    phone_verified_by_html: '<b>Teléfono verificado</b> por %{submitter_name}'
+    start_form_by_html: '<b>Envío iniciado</b> por %{submitter_name}'
+    view_form_by_html: '<b>Formulario visto</b> por %{submitter_name}'
+    invite_party_by_html: '<b>Invitado</b> %{invited_submitter_name} por %{submitter_name}'
+    complete_form_by_html: '<b>Envío completado</b> por %{submitter_name}'
+    api_complete_form_by_html: '<b>Envío completado vía API</b> por %{submitter_name}'
   import_list:
     select_worksheet: Seleccionar hoja de cálculo
     open: Abrir
@@ -1184,6 +1294,10 @@ it: &it
   enforce_recipients_order: Aplicar el orden de los destinatarios
   first_party: 'Prima parte'
   docuseal_trusted_signature: "Firma Fiduciaria DocuSeal"
+  hello_name: Ciao %{name}
+  you_are_invited_to_product_name: Sei stato invitato a %{product_name}
+  you_have_been_invited_to_account_name_product_name_please_sign_up_using_the_link_below_: 'Sei stato invitato a %{account_name} %{product_name}. Registrati utilizzando il link qui sotto:'
+  sent_using_product_name_free_document_signing_html: 'Inviato utilizzando la firma di documenti gratuita di <a href="%{product_url}">%{product_name}</a>.'
   sign_documents_with_trusted_certificate_provided_by_docu_seal_your_documents_and_data_are_never_shared_with_docu_seal_p_d_f_checksum_is_provided_to_generate_a_trusted_signature: "Firma documenti con un certificato di fiducia fornito da DocuSeal. I tuoi documenti e i tuoi dati non vengono mai condivisi con DocuSeal. Il checksum PDF è fornito per generare una firma di fiducia."
   hi_there: Ciao
   thanks: Grazie
@@ -1739,6 +1853,57 @@ it: &it
   opened: Aperto
   sent: Inviato
   awaiting: In attesa
+  document_id: ID del Documento
+  envelope_id: ID della Busta
+  event_log: Registro degli Eventi
+  verify: Verifica
+  testing_log_not_for_production_use: Registro di Test - Non per Uso in Produzione
+  original_sha256: SHA256 Originale
+  result_sha256: SHA256 del Risultato
+  generated_at: Generato il
+  email_verification: Verifica e-mail
+  phone_verification: Verifica telefono
+  session_id: ID della Sessione
+  option: Opzione
+  text_field: Campo di Testo
+  signature_field: Campo di Firma
+  initials_field: Campo di Iniziali
+  date_field: Campo Data
+  number_field: Campo Numero
+  image_field: Campo Immagine
+  file_field: Campo File
+  select_field: Campo di Selezione
+  checkbox_field: Campo di Checkbox
+  multiple_field: Campo Selezione Multipla
+  radio_field: Campo di Gruppo Radio
+  cells_field: Campo Celle
+  stamp_field: Campo Timbro
+  payment_field: Campo Pagamento
+  phone_field: Campo Telefono
+  paid_price: 'Pagato %{price}'
+  verified: Verificato
+  unverified: Non verificato
+  document: Documento
+  completed_at: Completato il
+  edit_recipient: Modifica Destinatario
+  update_recipient: Aggiorna Destinatario
+  use_international_format_1xxx_: 'Utilizza il formato internazionale: +1xxx...'
+  submitter_cannot_be_updated: Il mittente non può essere aggiornato.
+  at_least_one_field_must_be_filled: Almeno un campo deve essere compilato.
+  submission_event_names:
+    send_email_to_html: '<b>E-mail inviato</b> a %{submitter_name}'
+    send_reminder_email_to_html: '<b>E-mail di promemoria inviato</b> a %{submitter_name}'
+    send_sms_to_html: '<b>SMS inviato</b> a %{submitter_name}'
+    send_2fa_sms_to_html: '<b>SMS di verifica inviato</b> a %{submitter_name}'
+    open_email_by_html: '<b>E-mail aperta</b> da %{submitter_name}'
+    click_email_by_html: "<b>Link dell'e-mail cliccato</b> da %{submitter_name}"
+    click_sms_by_html: "<b>Link dell'SMS cliccato</b> da %{submitter_name}"
+    phone_verified_by_html: '<b>Telefono verificato</b> da %{submitter_name}'
+    start_form_by_html: '<b>Invio iniziato</b> da %{submitter_name}'
+    view_form_by_html: '<b>Modulo visualizzato</b> da %{submitter_name}'
+    invite_party_by_html: '<b>Invitato</b> %{invited_submitter_name} da %{submitter_name}'
+    complete_form_by_html: '<b>Invio completato</b> da %{submitter_name}'
+    api_complete_form_by_html: '<b>Invio completato tramite API</b> da %{submitter_name}'
   import_list:
     select_worksheet: Seleziona il foglio di lavoro
     open: Apri
@@ -1765,6 +1930,10 @@ fr: &fr
   enforce_recipients_order: "Respecter l'ordre des destinataires"
   first_party: 'Première partie'
   docuseal_trusted_signature: Signature de confiance DocuSeal
+  hello_name: Bonjour %{name}
+  you_are_invited_to_product_name: Vous êtes invité à %{product_name}
+  you_have_been_invited_to_account_name_product_name_please_sign_up_using_the_link_below_: 'Vous avez été invité à %{account_name} %{product_name}. Veuillez vous inscrire en utilisant le lien ci-dessous:'
+  sent_using_product_name_free_document_signing_html: 'Envoyé en utilisant la signature de documents gratuite de <a href="%{product_url}">%{product_name}</a>.'
   sign_documents_with_trusted_certificate_provided_by_docu_seal_your_documents_and_data_are_never_shared_with_docu_seal_p_d_f_checksum_is_provided_to_generate_a_trusted_signature: Signez des documents avec un certificat de confiance fourni par DocuSeal. Vos documents et données ne sont jamais partagés avec DocuSeal. Un checksum PDF est fourni pour générer une signature de confiance.
   hi_there: Bonjour
   thanks: Merci
@@ -2321,6 +2490,57 @@ fr: &fr
   opened: Ouvert
   sent: Envoyé
   awaiting: En attente
+  document_id: ID du document
+  envelope_id: ID de l'enveloppe
+  event_log: Journal d'événements
+  verify: Vérifier
+  testing_log_not_for_production_use: Journal de test - Ne pas utiliser en production
+  original_sha256: SHA256 original
+  result_sha256: SHA256 du résultat
+  generated_at: Généré le
+  email_verification: Vérification de l'e-mail
+  phone_verification: Vérification du téléphone
+  session_id: ID de session
+  option: Option
+  text_field: Champ de Texte
+  signature_field: Champ de Signature
+  initials_field: "Champ d'Initiales"
+  date_field: Champ de Date
+  number_field: Champ de Numéro
+  image_field: "Champ d'Image"
+  file_field: Champ de Fichier
+  select_field: Champ de Choix
+  checkbox_field: Champ de Coche
+  multiple_field: Champ de Choix Multiple
+  radio_field: Champ de Groupe Radio
+  cells_field: Champ de Cellules
+  stamp_field: Champ de Tampon
+  payment_field: Champ de Paiement
+  phone_field: Champ de Téléphone
+  paid_price: 'Payé %{price}'
+  verified: Vérifié
+  unverified: Non vérifié
+  document: Document
+  completed_at: Terminé le
+  edit_recipient: Modifica Destinatario
+  update_recipient: Aggiorna Destinatario
+  use_international_format_1xxx_: 'Utilizza il formato internazionale: +1xxx...'
+  submitter_cannot_be_updated: Il mittente non può essere aggiornato.
+  at_least_one_field_must_be_filled: Almeno un campo deve essere compilato.
+  submission_event_names:
+    send_email_to_html: '<b>E-mail envoyé</b> à %{submitter_name}'
+    send_reminder_email_to_html: '<b>E-mail de rappel envoyé</b> à %{submitter_name}'
+    send_sms_to_html: '<b>SMS envoyé</b> à %{submitter_name}'
+    send_2fa_sms_to_html: '<b>SMS de vérification envoyé</b> à %{submitter_name}'
+    open_email_by_html: '<b>E-mail ouvert</b> par %{submitter_name}'
+    click_email_by_html: "<b>Lien de l'e-mail cliqué</b> par %{submitter_name}"
+    click_sms_by_html: '<b>Lien du SMS cliqué</b> par %{submitter_name}'
+    phone_verified_by_html: '<b>Téléphone vérifié</b> par %{submitter_name}'
+    start_form_by_html: '<b>Soumission commencée</b> par %{submitter_name}'
+    view_form_by_html: '<b>Formulaire consulté</b> par %{submitter_name}'
+    invite_party_by_html: '<b>Invité</b> %{invited_submitter_name} par %{submitter_name}'
+    complete_form_by_html: '<b>Soumission terminée</b> par %{submitter_name}'
+    api_complete_form_by_html: "<b>Soumission terminée via l'API</b> par %{submitter_name}"
   import_list:
     select_worksheet: Sélectionner la feuille de calcul
     open: Ouvrir
@@ -2347,6 +2567,10 @@ pt: &pt
   enforce_recipients_order: 'Forçar a ordem dos recipientes'
   first_party: 'Primeira Parte'
   docuseal_trusted_signature: Assinatura Confiável DocuSeal
+  hello_name: Olá %{name}
+  you_are_invited_to_product_name: Você está convidado para %{product_name}
+  you_have_been_invited_to_account_name_product_name_please_sign_up_using_the_link_below_: 'Você foi convidado para %{account_name} %{product_name}. Inscreva-se usando o link abaixo:'
+  sent_using_product_name_free_document_signing_html: 'Enviado usando a assinatura gratuita de documentos de <a href="%{product_url}">%{product_name}</a>.'
   sign_documents_with_trusted_certificate_provided_by_docu_seal_your_documents_and_data_are_never_shared_with_docu_seal_p_d_f_checksum_is_provided_to_generate_a_trusted_signature: Assine documentos com certificado confiável fornecido pela DocuSeal. Seus documentos e dados nunca são compartilhados com a DocuSeal. O checksum do PDF é fornecido para gerar uma assinatura confiável.
   hi_there: Olá
   thanks: Obrigado
@@ -2518,7 +2742,7 @@ pt: &pt
   removing: Removendo
   delete: Excluir
   default: Padrão
-  are_you_sure_: Você tem certeza?
+  are_you_sure_: Tem certeza?
   timestamp_server: Servidor de carimbo de tempo
   timeserver_url: URL do servidor de carimbo de tempo
   url_of_the_trusted_rfc_3161_timeserver_to_be_used_to_generate_timestamp_signatures: URL do servidor de carimbo de tempo RFC 3161 confiável a ser usado para gerar assinaturas de carimbo de tempo.
@@ -2696,9 +2920,9 @@ pt: &pt
   draw_signature: Desenhar assinatura
   clear: Limpar
   signature_uploaded: Assinatura enviada
-  submission_deletion_is_irreversible_and_will_permanently_remove_all_associated_signed_documents_with_it_are_you_sure_: 'A exclusão da submissão é irreversível e removerá permanentemente todos os documentos assinados associados a ela. Você tem certeza?'
+  submission_deletion_is_irreversible_and_will_permanently_remove_all_associated_signed_documents_with_it_are_you_sure_: 'A exclusão da submissão é irreversível e removerá permanentemente todos os documentos assinados associados a ela. Tem certeza?'
   return_back_to_your_desktop_device_to_complete_the_form_or_continue_on_mobile_html: 'Volte para seu dispositivo desktop para concluir o formulário ou <a class="link" href="%{link}">continue no celular</a>'
-  template_deletion_is_irreversible_and_will_permanently_remove_all_associated_signed_documents_with_it_are_you_sure_: A exclusão do modelo é irreversível e removerá permanentemente todos os documentos assinados associados a ele. Você tem certeza?
+  template_deletion_is_irreversible_and_will_permanently_remove_all_associated_signed_documents_with_it_are_you_sure_: A exclusão do modelo é irreversível e removerá permanentemente todos os documentos assinados associados a ele. Tem certeza?
   rename_folder: Renomear pasta
   folder_name: Nome da pasta
   rename: Renomear
@@ -2902,6 +3126,57 @@ pt: &pt
   opened: Aberto
   sent: Enviado
   awaiting: Aguardando
+  document_id: ID do Documento
+  envelope_id: ID do Envelope
+  event_log: Log de Eventos
+  verify: Verificar
+  testing_log_not_for_production_use: Log de Teste - Não para Uso em Produção
+  original_sha256: SHA256 Original
+  result_sha256: SHA256 do Resultado
+  generated_at: Gerado em
+  email_verification: Verificação de E-mail
+  phone_verification: Verificação de Telefone
+  session_id: ID da Sessão
+  option: Opção
+  text_field: Campo de Texto
+  signature_field: Campo de Assinatura
+  initials_field: Campo de Rúbrica
+  date_field: Campo de Data
+  number_field: Campo de Número
+  image_field: Campo de Imagem
+  file_field: Campo de Arquivo
+  select_field: Campo de Seleção
+  checkbox_field: Campo de Caixa
+  multiple_field: Campo de Opção Múltipla
+  radio_field: Campo de Grupo Rádio
+  cells_field: Campo de Células
+  stamp_field: Campo de Carimbo
+  payment_field: Campo de Pagamento
+  phone_field: Campo de Telefone
+  paid_price: 'Pago %{price}'
+  verified: Verificado
+  unverified: Não verificado
+  document: Documento
+  completed_at: Concluído em
+  edit_recipient: Editar Destinatário
+  update_recipient: Atualizar Destinatário
+  use_international_format_1xxx_: 'Use o formato internacional: +1xxx...'
+  submitter_cannot_be_updated: O remetente não pode ser atualizado.
+  at_least_one_field_must_be_filled: Pelo menos um campo deve ser preenchido.
+  submission_event_names:
+    send_email_to_html: '<b>E-mail enviado</b> para %{submitter_name}'
+    send_reminder_email_to_html: '<b>E-mail de lembrete enviado</b> para %{submitter_name}'
+    send_sms_to_html: '<b>SMS enviado</b> para %{submitter_name}'
+    send_2fa_sms_to_html: '<b>SMS de verificação enviado</b> para %{submitter_name}'
+    open_email_by_html: '<b>E-mail aberto</b> por %{submitter_name}'
+    click_email_by_html: '<b>Link do e-mail clicado</b> por %{submitter_name}'
+    click_sms_by_html: '<b>Link do SMS clicado</b> por %{submitter_name}'
+    phone_verified_by_html: '<b>Telefone verificado</b> por %{submitter_name}'
+    start_form_by_html: '<b>Submissão iniciada</b> por %{submitter_name}'
+    view_form_by_html: '<b>Formulário visualizado</b> por %{submitter_name}'
+    invite_party_by_html: '<b>Convidado</b> %{invited_submitter_name} por %{submitter_name}'
+    complete_form_by_html: '<b>Submissão concluída</b> por %{submitter_name}'
+    api_complete_form_by_html: '<b>Submissão concluída via API</b> por %{submitter_name}'
   import_list:
     select_worksheet: Selecionar planilha
     open: Abrir
@@ -2928,6 +3203,10 @@ de: &de
   enforce_recipients_order: 'Empfängerreihenfolge durchsetzen'
   first_party: 'Erste Partei'
   docuseal_trusted_signature: DocuSeal-Vertrauenssignatur
+  hello_name: Hallo %{name}
+  you_are_invited_to_product_name: Sie sind eingeladen zu %{product_name}
+  you_have_been_invited_to_account_name_product_name_please_sign_up_using_the_link_below_: 'Sie wurden zu %{account_name} %{product_name} eingeladen. Bitte registrieren Sie sich über den folgenden Link:'
+  sent_using_product_name_free_document_signing_html: 'Gesendet mit der kostenlosen Dokumentensignierung von <a href="%{product_url}">%{product_name}</a>.'
   sign_documents_with_trusted_certificate_provided_by_docu_seal_your_documents_and_data_are_never_shared_with_docu_seal_p_d_f_checksum_is_provided_to_generate_a_trusted_signature: Unterzeichnen Sie Dokumente mit einem vertrauenswürdigen Zertifikat von DocuSeal. Ihre Dokumente und Daten werden niemals mit DocuSeal geteilt. Eine PDF-Prüfziffer wird bereitgestellt, um eine vertrauenswürdige Signatur zu generieren.
   hi_there: Hallo
   thanks: Danke
@@ -3483,6 +3762,57 @@ de: &de
   opened: Geöffnet
   sent: Gesendet
   awaiting: Ausstehend
+  document_id: Dokumenten-ID
+  envelope_id: Umschlag-ID
+  event_log: Ereignisprotokoll
+  verify: Überprüfen
+  testing_log_not_for_production_use: Testprotokoll - Nicht für den Produktionseinsatz
+  original_sha256: Original SHA256
+  result_sha256: Ergebnis SHA256
+  generated_at: Generiert am
+  email_verification: E-Mail-Verifizierung
+  phone_verification: Telefonverifizierung
+  session_id: Sitzungs-ID
+  option: Option
+  text_field: Textfeld
+  signature_field: Unterschriftsfeld
+  initials_field: Initialenfeld
+  date_field: Datumsfeld
+  number_field: Zahlenfeld
+  image_field: Bildfeld
+  file_field: Dateifeld
+  select_field: Auswahlfeld
+  checkbox_field: Checkbox-Feld
+  multiple_field: Mehrfach-Auswahlfeld
+  radio_field: Radio-Gruppenfeld
+  cells_field: Zellenfeld
+  stamp_field: Stempelfeld
+  payment_field: Zahlungsfeld
+  phone_field: Telefonfeld
+  paid_price: 'Bezahlt %{price}'
+  verified: Verifiziert
+  unverified: Nicht verifiziert
+  document: Dokument
+  completed_at: Abgeschlossen am
+  edit_recipient: Empfänger bearbeiten
+  update_recipient: Empfänger aktualisieren
+  use_international_format_1xxx_: 'Verwenden Sie das internationale Format: +1xxx...'
+  submitter_cannot_be_updated: Der Absender kann nicht aktualisiert werden.
+  at_least_one_field_must_be_filled: Mindestens ein Feld muss ausgefüllt werden.
+  submission_event_names:
+    send_email_to_html: '<b>E-Mail gesendet</b> an %{submitter_name}'
+    send_reminder_email_to_html: '<b>Erinnerungs-E-Mail gesendet</b> an %{submitter_name}'
+    send_sms_to_html: '<b>SMS gesendet</b> an %{submitter_name}'
+    send_2fa_sms_to_html: '<b>Verifizierungs-SMS gesendet</b> an %{submitter_name}'
+    open_email_by_html: '<b>E-Mail geöffnet</b> von %{submitter_name}'
+    click_email_by_html: '<b>E-Mail-Link angeklickt</b> von %{submitter_name}'
+    click_sms_by_html: '<b>SMS-Link angeklickt</b> von %{submitter_name}'
+    phone_verified_by_html: '<b>Telefon verifiziert</b> von %{submitter_name}'
+    start_form_by_html: '<b>Einreichung gestartet</b> von %{submitter_name}'
+    view_form_by_html: '<b>Formular angesehen</b> von %{submitter_name}'
+    invite_party_by_html: '<b>Eingeladen</b> %{invited_submitter_name} von %{submitter_name}'
+    complete_form_by_html: '<b>Einreichung abgeschlossen</b> von %{submitter_name}'
+    api_complete_form_by_html: '<b>Einreichung über API abgeschlossen</b> von %{submitter_name}'
   import_list:
     select_worksheet: Arbeitsblatt auswählen
     open: Öffnen

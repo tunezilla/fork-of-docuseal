@@ -39,9 +39,9 @@ if ENV['CREATE_DEFAULT_USER'] == 'true'
       })
 
       if ENV['DEFAULT_ACCOUNT_WEBHOOK_URL']
-        @encrypted_config = @account.encrypted_configs.find_or_initialize_by(key: EncryptedConfig::WEBHOOK_URL_KEY)
-        @encrypted_config.value = ENV['DEFAULT_ACCOUNT_WEBHOOK_URL']
-        @encrypted_config.save!
+        @webhook_url = @account.webhook_urls.first_or_initialize
+        @webhook_url.url = ENV['DEFAULT_ACCOUNT_WEBHOOK_URL']
+        @webhook_url.save!
       end
 
       Docuseal.refresh_default_url_options!

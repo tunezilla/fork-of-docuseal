@@ -9,13 +9,20 @@ class TemplatesController < ApplicationController
     submissions = @template.submissions.accessible_by(current_ability)
     submissions = submissions.active if @template.archived_at.blank?
     submissions = Submissions.search(submissions, params[:q], search_values: true)
+    submissions = Submissions::Filter.call(submissions, current_user, params)
 
     @base_submissions = submissions
 
     submissions = submissions.pending if params[:status] == 'pending'
     submissions = submissions.completed if params[:status] == 'completed'
 
-    @pagy, @submissions = pagy(submissions.preload(submitters: :start_form_submission_events).order(id: :desc))
+    submissions = if params[:completed_at_from].present? || params[:completed_at_to].present?
+                    submissions.order(Submitter.arel_table[:completed_at].maximum.desc)
+                  else
+                    submissions.order(id: :desc)
+                  end
+
+    @pagy, @submissions = pagy(submissions.preload(submitters: :start_form_submission_events))
   rescue ActiveRecord::RecordNotFound
     redirect_to root_path
   end
@@ -66,7 +73,7 @@ class TemplatesController < ApplicationController
     if @template.save
       Templates::CloneAttachments.call(template: @template, original_template: @base_template) if @base_template
 
-      SendTemplateUpdatedWebhookRequestJob.perform_async('template_id' => @template.id)
+      enqueue_template_created_webhooks(@template)
 
       maybe_redirect_to_template(@template)
     else
@@ -77,7 +84,7 @@ class TemplatesController < ApplicationController
   def update
     @template.update!(template_params)
 
-    SendTemplateUpdatedWebhookRequestJob.perform_async('template_id' => @template.id)
+    enqueue_template_updated_webhooks(@template)
 
     head :ok
   end
@@ -125,6 +132,20 @@ class TemplatesController < ApplicationController
       redirect_to(edit_template_path(@template))
     else
       redirect_back(fallback_location: root_path, notice: I18n.t('template_has_been_cloned'))
+    end
+  end
+
+  def enqueue_template_created_webhooks(template)
+    WebhookUrls.for_account_id(template.account_id, 'template.created').each do |webhook_url|
+      SendTemplateCreatedWebhookRequestJob.perform_async('template_id' => template.id,
+                                                         'webhook_url_id' => webhook_url.id)
+    end
+  end
+
+  def enqueue_template_updated_webhooks(template)
+    WebhookUrls.for_account_id(template.account_id, 'template.updated').each do |webhook_url|
+      SendTemplateUpdatedWebhookRequestJob.perform_async('template_id' => template.id,
+                                                         'webhook_url_id' => webhook_url.id)
     end
   end
 

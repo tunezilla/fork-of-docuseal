@@ -37,6 +37,7 @@
     <AppearsOn :field="field" />
     <div class="text-center">
       <input
+        :id="field.uuid"
         ref="input"
         v-model="value"
         class="base-input !text-2xl text-center w-full"
@@ -45,6 +46,7 @@
         :name="`values[${field.uuid}]`"
         @keydown.enter="onEnter"
         @focus="$emit('focus')"
+        @paste="onPaste"
       >
     </div>
   </div>
@@ -96,6 +98,25 @@ export default {
         e.preventDefault()
 
         this.$emit('submit')
+      }
+    },
+    onPaste (e) {
+      e.preventDefault()
+
+      let pasteData = e.clipboardData.getData('text').trim()
+
+      if (pasteData.match(/^\d{2}\.\d{2}\.\d{4}$/)) {
+        pasteData = pasteData.split('.').reverse().join('-')
+      }
+
+      const parsedDate = new Date(pasteData)
+
+      if (!isNaN(parsedDate)) {
+        const inputEl = this.$refs.input
+
+        inputEl.valueAsDate = new Date(parsedDate.getTime() - parsedDate.getTimezoneOffset() * 60000)
+
+        inputEl.dispatchEvent(new Event('input', { bubbles: true }))
       }
     },
     setCurrentDate () {

@@ -11,26 +11,22 @@ class SendSubmissionCompletedWebhookRequestJob
 
   def perform(params = {})
     submission = Submission.find(params['submission_id'])
+    webhook_url = WebhookUrl.find(params['webhook_url_id'])
 
     attempt = params['attempt'].to_i
 
-    webhook_url = submission.account.webhook_urls.find(params['webhook_url_id'])
-
-    url = webhook_url.url if webhook_url.events.include?('submission.completed')
-
-    return if url.blank?
+    return if webhook_url.url.blank? || webhook_url.events.exclude?('submission.completed')
 
     resp = begin
-      Faraday.post(url,
+      Faraday.post(webhook_url.url,
                    {
                      event_type: 'submission.completed',
                      timestamp: Time.current,
                      data: Submissions::SerializeForApi.call(submission)
                    }.to_json,
-                   **EncryptedConfig.find_or_initialize_by(account_id: submission.account_id,
-                                                           key: EncryptedConfig::WEBHOOK_SECRET_KEY)&.value.to_h,
                    'Content-Type' => 'application/json',
-                   'User-Agent' => USER_AGENT)
+                   'User-Agent' => USER_AGENT,
+                   **webhook_url.secret.to_h)
     rescue Faraday::Error
       nil
     end

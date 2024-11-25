@@ -51,22 +51,22 @@ Metrics/AbcSize:
     - spec/**/*
 
 Metrics/ModuleLength:
-  Max: 500
+  Max: 1000
 
 Metrics/ClassLength:
-  Max: 500
+  Max: 1000
 
 RSpec/NestedGroups:
   Max: 6
 
 RSpec/MultipleExpectations:
-  Max: 20
+  Max: 25
 
 RSpec/ExampleLength:
-  Max: 40
+  Max: 50
 
 RSpec/MultipleMemoizedHelpers:
-  Max: 6
+  Max: 9
 
 Metrics/BlockNesting:
   Max: 4

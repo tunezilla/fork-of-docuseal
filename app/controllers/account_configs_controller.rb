@@ -8,6 +8,7 @@ class AccountConfigsController < ApplicationController
     AccountConfig::ALLOW_TYPED_SIGNATURE,
     AccountConfig::FORCE_MFA,
     AccountConfig::ALLOW_TO_RESUBMIT,
+    AccountConfig::ALLOW_TO_DECLINE_KEY,
     AccountConfig::FORM_PREFILL_SIGNATURE_KEY,
     AccountConfig::ESIGNING_PREFERENCE_KEY,
     AccountConfig::FORM_WITH_CONFETTI_KEY,
@@ -16,7 +17,8 @@ class AccountConfigsController < ApplicationController
     AccountConfig::FLATTEN_RESULT_PDF_KEY,
     AccountConfig::WITH_SIGNATURE_ID,
     AccountConfig::COMBINE_PDF_RESULT_KEY,
-    AccountConfig::REQUIRE_SIGNING_REASON_KEY
+    AccountConfig::REQUIRE_SIGNING_REASON_KEY,
+    AccountConfig::DOCUMENT_FILENAME_FORMAT_KEY
   ].freeze
 
   InvalidKey = Class.new(StandardError)

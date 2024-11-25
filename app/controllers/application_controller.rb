@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :button_title,
                 :current_account,
+                :form_link_host,
                 :svg_icon
 
   impersonates :user, with: ->(uuid) { User.find_by(uuid:) }
@@ -39,6 +40,10 @@ class ApplicationController < ActionController::Base
   end
 
   def default_url_options
+    if request.domain == 'docuseal.com'
+      return { host: 'docuseal.com', protocol: ENV['FORCE_SSL'].present? ? 'https' : 'http' }
+    end
+
     Docuseal.default_url_options
   end
 
@@ -100,5 +105,15 @@ class ApplicationController < ActionController::Base
 
   def svg_icon(icon_name, class: '')
     render_to_string(partial: "icons/#{icon_name}", locals: { class: })
+  end
+
+  def form_link_host
+    Docuseal.default_url_options[:host]
+  end
+
+  def maybe_redirect_com
+    return if request.domain != 'docuseal.co'
+
+    redirect_to request.url.gsub('.co/', '.com/'), allow_other_host: true, status: :moved_permanently
   end
 end

@@ -23,7 +23,7 @@ module Submissions
     RTL_REGEXP = TextUtils::RTL_REGEXP
     MAX_IMAGE_HEIGHT = 100
 
-    US_TIMEZONES = %w[EST CST MST PST HST AKDT].freeze
+    US_TIMEZONES = TimeUtils::US_TIMEZONES
 
     module_function
 
@@ -64,7 +64,10 @@ module Submissions
 
     def build_audit_trail(submission)
       account = submission.account
-      verify_url = Rails.application.routes.url_helpers.settings_esign_url(**Docuseal.default_url_options)
+      verify_url = Rails.application.routes.url_helpers.settings_esign_url(
+        **Docuseal.default_url_options, host: ENV.fetch('EMAIL_HOST', Docuseal.default_url_options[:host])
+      )
+
       page_size =
         if TimeUtils.timezone_abbr(account.timezone, Time.current.beginning_of_year).in?(US_TIMEZONES)
           :Letter
@@ -291,7 +294,16 @@ module Submissions
             ),
             if field['type'].in?(%w[image signature initials stamp])
               attachment = submitter.attachments.find { |a| a.uuid == value }
-              image = Vips::Image.new_from_buffer(attachment.download, '').autorot
+
+              image =
+                begin
+                  Vips::Image.new_from_buffer(attachment.download, '').autorot
+                rescue Vips::Error
+                  next unless attachment.content_type.starts_with?('image/')
+                  next if attachment.byte_size.zero?
+
+                  raise
+                end
 
               scale = [600.0 / image.width, 600.0 / image.height].min
 
@@ -402,7 +414,7 @@ module Submissions
       column.image(PdfIcons.logo_io, width: 40, height: 40, position: :float) if Docuseal::SHOW_LOGO
 
       column.formatted_text([{ text: Docuseal::PRODUCT_NAME,
-                               link: Docuseal::PRODUCT_URL }],
+                               link: Docuseal::PRODUCT_EMAIL_URL }],
                             font_size: 20,
                             font: [FONT_NAME, { variant: :bold }],
                             width: 100,

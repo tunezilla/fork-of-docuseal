@@ -145,6 +145,10 @@
           {{ t('clear') }}
         </a>
       </div>
+      <div
+        v-if="isTextSignature"
+        class="absolute top-0 right-0 left-0 bottom-0"
+      />
       <canvas
         v-show="!modelValue && !computedPreviousValue"
         ref="canvas"
@@ -418,6 +422,10 @@ export default {
 
     if (this.$refs.canvas) {
       this.pad = new SignaturePad(this.$refs.canvas)
+
+      if (this.field.preferences?.color) {
+        this.pad.penColor = this.field.preferences.color
+      }
 
       this.pad.addEventListener('endStroke', () => {
         this.isSignatureStarted = true

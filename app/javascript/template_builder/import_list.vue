@@ -77,7 +77,7 @@
             <div class="w-full relative">
               <select
                 class="base-select !select-sm !h-10"
-                :class="{ '!text-gray-300': !mapping.column_index }"
+                :class="{ '!text-gray-300': !mapping.column_index && mapping.column_index != 0 }"
                 required
                 @change="mapping.column_index = parseInt($event.target.value)"
               >
@@ -279,13 +279,17 @@ export default {
 
         this.mappings.forEach((mapping) => {
           if (mapping.field_name && mapping.column_index != null) {
-            submittersIndex[mapping.submitter_uuid] ||= { uuid: mapping.submitter_uuid, fields: [] }
+            submittersIndex[mapping.submitter_uuid] ||= {
+              uuid: mapping.submitter_uuid,
+              role: this.submitters.find((s) => s.uuid === mapping.submitter_uuid).name,
+              fields: []
+            }
 
             if (['name', 'email', 'phone', 'external_id'].includes(mapping.field_name.toLowerCase())) {
               submittersIndex[mapping.submitter_uuid][mapping.field_name.toLowerCase()] = row[mapping.column_index]
             }
 
-            const fieldType = this.fieldTypesIndex[mapping.submitter_uuid][mapping.field_name]
+            const fieldType = this.fieldTypesIndex[mapping.submitter_uuid]?.[mapping.field_name]
 
             if (fieldType && fieldType !== 'phone') {
               submittersIndex[mapping.submitter_uuid].fields.push({
@@ -296,7 +300,7 @@ export default {
         })
 
         if (Object.keys(submittersIndex).length !== 0) {
-          submissions.push({ submitters: Object.values(submittersIndex) })
+          submissions.push({ submitters: this.submitters.map((s) => submittersIndex[s.uuid]).filter(Boolean) })
         }
       })
 

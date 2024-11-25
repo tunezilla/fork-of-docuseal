@@ -14,14 +14,17 @@ module Submitters
       unless submitter.submission_events.exists?(event_type: 'start_form')
         SubmissionEvents.create_with_tracking_data(submitter, 'start_form', request)
 
-        SendFormStartedWebhookRequestJob.perform_async({ 'submitter_id' => submitter.id })
+        WebhookUrls.for_account_id(submitter.account_id, 'form.started').each do |webhook_url|
+          SendFormStartedWebhookRequestJob.perform_async('submitter_id' => submitter.id,
+                                                         'webhook_url_id' => webhook_url.id)
+        end
       end
 
       update_submitter!(submitter, params, request)
 
       submitter.submission.save!
 
-      ProcessSubmitterCompletionJob.perform_async({ 'submitter_id' => submitter.id }) if submitter.completed_at?
+      ProcessSubmitterCompletionJob.perform_async('submitter_id' => submitter.id) if submitter.completed_at?
 
       submitter
     end
@@ -90,7 +93,11 @@ module Submitters
         if params[:cast_boolean] == 'true'
           v == 'true'
         elsif params[:cast_number] == 'true'
-          (v.to_f % 1).zero? ? v.to_i : v.to_f
+          if v == ''
+            nil
+          else
+            (v.to_f % 1).zero? ? v.to_i : v.to_f
+          end
         elsif params[:normalize_phone] == 'true'
           v.to_s.gsub(/[^0-9+]/, '')
         else
@@ -204,7 +211,7 @@ module Submitters
     end
 
     def replace_default_variables(value, attrs, submission, with_time: false)
-      return value if value.in?([true, false])
+      return value if value.in?([true, false]) || value.is_a?(Numeric)
       return if value.blank?
 
       value.to_s.gsub(VARIABLE_REGEXP) do |e|

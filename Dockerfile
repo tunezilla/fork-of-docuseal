@@ -2,7 +2,7 @@ FROM busybox AS source-compressor
 COPY . /app
 RUN tar -zcvf /source.tar.gz /app
 
-FROM ruby:3.3.4-alpine as fonts
+FROM ruby:3.4.1-alpine as fonts
 
 WORKDIR /fonts
 
@@ -10,7 +10,7 @@ RUN apk --no-cache add fontforge wget && wget https://github.com/satbyy/go-noto-
 
 RUN fontforge -lang=py -c 'font1 = fontforge.open("FreeSans.ttf"); font2 = fontforge.open("NotoSansSymbols2-Regular.ttf"); font1.mergeFonts(font2); font1.generate("FreeSans.ttf")'
 
-FROM ruby:3.3.4-alpine as webpack
+FROM ruby:3.4.1-alpine as webpack
 
 ENV RAILS_ENV=production
 ENV NODE_ENV=production
@@ -36,7 +36,7 @@ COPY ./app/views ./app/views
 
 RUN echo "gem 'shakapacker'" > Gemfile && ./bin/shakapacker
 
-FROM ruby:3.3.4-alpine as app
+FROM ruby:3.4.1-alpine as app
 
 ENV RAILS_ENV=production
 ENV BUNDLE_WITHOUT="development:test"
@@ -66,12 +66,13 @@ RUN apk add --no-cache build-base && bundle install && apk del --no-cache build-
 COPY ./bin ./bin
 COPY ./app ./app
 COPY ./config ./config
-COPY ./db ./db
+COPY ./db/migrate ./db/migrate
 COPY ./log ./log
 COPY ./lib ./lib
 COPY ./public ./public
 COPY ./tmp ./tmp
 COPY LICENSE README.md Rakefile config.ru .version ./
+COPY .version ./public/version
 
 COPY --from=fonts /fonts/GoNotoKurrent-Regular.ttf /fonts/GoNotoKurrent-Bold.ttf /fonts/DancingScript-Regular.otf /fonts/OFL.txt /fonts
 COPY --from=fonts /fonts/FreeSans.ttf /usr/share/fonts/freefont

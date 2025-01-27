@@ -17,6 +17,8 @@ module Api
         submissions = submissions.joins(template: :folder).where(folder: { name: params[:template_folder] })
       end
 
+      submissions = Submissions::Filter.call(submissions, current_user, params)
+
       submissions = paginate(submissions.preload(:created_by_user, :submitters,
                                                  template: :folder,
                                                  combined_document_attachment: :blob,
@@ -78,7 +80,9 @@ module Api
 
       submissions.each do |submission|
         submission.submitters.each do |submitter|
-          ProcessSubmitterCompletionJob.perform_async('submitter_id' => submitter.id) if submitter.completed_at?
+          next unless submitter.completed_at?
+
+          ProcessSubmitterCompletionJob.perform_async('submitter_id' => submitter.id, 'send_invitation_email' => false)
         end
       end
 
@@ -91,7 +95,7 @@ module Api
     end
 
     def destroy
-      if params[:permanently] == 'true'
+      if params[:permanently].in?(['true', true])
         @submission.destroy!
       else
         @submission.update!(archived_at: Time.current)
@@ -114,7 +118,19 @@ module Api
         end
       end
 
-      json = { submitters: json } if request.path.ends_with?('/init')
+      if request.path.ends_with?('/init')
+        json =
+          if submissions.size == 1
+            {
+              id: submissions.first.id,
+              submitters: json,
+              expire_at: submissions.first.expire_at,
+              created_at: submissions.first.created_at
+            }
+          else
+            { submitters: json }
+          end
+      end
 
       json
     end
@@ -176,7 +192,7 @@ module Api
         key = params.key?(:submission) ? :submission : :submissions
 
         params.permit(
-          key => [permitted_attrs]
+          { key => [permitted_attrs] }, { key => permitted_attrs }
         ).fetch(key, [])
       end
     end

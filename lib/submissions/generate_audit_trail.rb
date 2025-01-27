@@ -43,12 +43,16 @@ module Submissions
 
         last_submitter = submission.submitters.select(&:completed_at).max_by(&:completed_at)
 
-        sign_params = {
-          reason: sign_reason,
-          **Submissions::GenerateResultAttachments.build_signing_params(last_submitter, pkcs, tsa_url)
-        }
+        if pkcs
+          sign_params = {
+            reason: sign_reason,
+            **Submissions::GenerateResultAttachments.build_signing_params(last_submitter, pkcs, tsa_url)
+          }
 
-        document.sign(io, **sign_params)
+          document.sign(io, **sign_params)
+        else
+          document.write(io)
+        end
 
         Submissions::GenerateResultAttachments.maybe_enable_ltv(io, sign_params)
 
@@ -171,7 +175,7 @@ module Submissions
                                                                   padding: [15, 0, 8, 0],
                                                                   position: :float)
 
-        unless submission.source.in?(%w[embed api])
+        if show_verify?(submission)
           column.formatted_text([{ link: verify_url, text: I18n.t('verify'), style: :link }],
                                 font_size: 9, padding: [15, 0, 10, 0], position: :float, text_align: :right)
         end
@@ -234,6 +238,11 @@ module Submissions
             e['type'] == 'phone' && e['submitter_uuid'] == submitter.uuid && submitter.values[e['uuid']].present?
           end
 
+        is_id_verified =
+          submission.template_fields.any? do |e|
+            e['type'] == 'verification' && e['submitter_uuid'] == submitter.uuid && submitter.values[e['uuid']].present?
+          end
+
         submitter_field_counters = Hash.new { 0 }
 
         info_rows = [
@@ -255,6 +264,9 @@ module Submissions
                 },
                 submitter.phone && is_phone_verified && {
                   text: "#{I18n.t('phone_verification')}: #{I18n.t('verified')}\n"
+                },
+                is_id_verified && {
+                  text: "#{I18n.t('identity_verification')}: #{I18n.t('verified')}\n"
                 },
                 completed_event.data['ip'] && { text: "IP: #{completed_event.data['ip']}\n" },
                 completed_event.data['sid'] && { text: "#{I18n.t('session_id')}: #{completed_event.data['sid']}\n" },
@@ -376,9 +388,12 @@ module Submissions
           end
 
         text =
-          if event.event_type == 'invite_party' &&
-             (invited_submitter = submission.submitters.find { |e| e.uuid == event.data['uuid'] }) &&
-             (name = submission.template_submitters.find { |e| e['uuid'] == event.data['uuid'] }&.dig('name'))
+          if event.event_type == 'complete_verification'
+            I18n.t('submission_event_names.complete_verification_by_html', provider: event.data['method'],
+                                                                           submitter_name:)
+          elsif event.event_type == 'invite_party' &&
+                (invited_submitter = submission.submitters.find { |e| e.uuid == event.data['uuid'] }) &&
+                (name = submission.template_submitters.find { |e| e['uuid'] == event.data['uuid'] }&.dig('name'))
             invited_submitter_name = [invited_submitter.name || invited_submitter.email || invited_submitter.phone,
                                       name].join(' ')
             I18n.t('submission_event_names.invite_party_by_html', invited_submitter_name:,
@@ -409,6 +424,10 @@ module Submissions
     end
 
     def maybe_add_background(_canvas, _submission, _page_size); end
+
+    def show_verify?(submission)
+      !submission.source.in?(%w[embed api])
+    end
 
     def add_logo(column, _submission = nil)
       column.image(PdfIcons.logo_io, width: 40, height: 40, position: :float) if Docuseal::SHOW_LOGO

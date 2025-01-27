@@ -5,7 +5,7 @@
       class="roles-dropdown w-full rounded-lg"
       :style="withStickySubmitters ? { backgroundColor } : {}"
       :submitters="submitters"
-      :menu-style="{ backgroundColor: ['', null, 'transparent'].includes(backgroundColor) ? 'white' : backgroundColor }"
+      :menu-style="{ overflow: 'auto', display: 'flex', flexDirection: 'row', maxHeight: 'calc(100vh - 120px)', backgroundColor: ['', null, 'transparent'].includes(backgroundColor) ? 'white' : backgroundColor }"
       :editable="editable && !defaultSubmitters.length"
       @new-submitter="save"
       @remove="removeSubmitter"
@@ -26,7 +26,7 @@
       :field="field"
       :type-index="fields.filter((f) => f.type === field.type).indexOf(field)"
       :editable="editable && (!fieldsDragFieldRef.value || fieldsDragFieldRef.value !== field)"
-      :default-field="defaultFields.find((f) => f.name === field.name)"
+      :default-field="defaultFieldsIndex[field.name]"
       :draggable="editable"
       @dragstart="fieldsDragFieldRef.value = field"
       @dragend="fieldsDragFieldRef.value = null"
@@ -111,14 +111,14 @@
       :key="type"
     >
       <button
-        v-if="(fieldTypes.length === 0 || fieldTypes.includes(type)) && (withPhone || type != 'phone') && (withPayment || type != 'payment')"
+        v-if="(fieldTypes.length === 0 || fieldTypes.includes(type)) && (withPhone || type != 'phone') && (withPayment || type != 'payment') && (withVerification || type != 'verification')"
         draggable="true"
         class="field-type-button group flex items-center justify-center border border-dashed w-full rounded relative"
         :style="{ backgroundColor }"
         :class="drawFieldType === type ? 'border-base-content/40' : 'border-base-300 hover:border-base-content/20'"
         @dragstart="onDragstart({ type: type })"
         @dragend="$emit('drag-end')"
-        @click="['file', 'payment'].includes(type) ? $emit('add-field', type) : $emit('set-draw-type', type)"
+        @click="['file', 'payment', 'verification'].includes(type) ? $emit('add-field', type) : $emit('set-draw-type', type)"
       >
         <div
           class="flex items-console transition-all cursor-grab h-full absolute left-0"
@@ -141,6 +141,32 @@
       >
         <a
           href="https://www.docuseal.com/pricing"
+          target="_blank"
+          class="opacity-50 flex items-center justify-center border border-dashed border-base-300 w-full rounded relative"
+          :style="{ backgroundColor }"
+        >
+          <div class="w-0 absolute left-0">
+            <IconLock
+              width="18"
+              height="18"
+              stroke-width="1.5"
+            />
+          </div>
+          <div class="flex items-center flex-col px-2 py-2">
+            <component :is="icon" />
+            <span class="text-xs mt-1">
+              {{ fieldNames[type] }}
+            </span>
+          </div>
+        </a>
+      </div>
+      <div
+        v-else-if="withVerification === false && type == 'verification' && (fieldTypes.length === 0 || fieldTypes.includes(type))"
+        class="tooltip tooltip-bottom flex tooltip-bottom-start"
+        :data-tip="t('obtain_qualified_electronic_signature_with_the_trusted_provider_click_to_learn_more')"
+      >
+        <a
+          href="https://www.docuseal.com/contact"
           target="_blank"
           class="opacity-50 flex items-center justify-center border border-dashed border-base-300 w-full rounded relative"
           :style="{ backgroundColor }"
@@ -197,10 +223,14 @@ export default {
     IconDrag,
     IconLock
   },
-  inject: ['save', 'backgroundColor', 'withPhone', 'withPayment', 't', 'fieldsDragFieldRef'],
+  inject: ['save', 'backgroundColor', 'withPhone', 'withVerification', 'withPayment', 't', 'fieldsDragFieldRef'],
   props: {
     fields: {
       type: Array,
+      required: true
+    },
+    template: {
+      type: Object,
       required: true
     },
     withHelp: {
@@ -269,6 +299,13 @@ export default {
     isShowFieldSearch () {
       return this.submitterDefaultFields.length > 15
     },
+    defaultFieldsIndex () {
+      return this.defaultFields.reduce((acc, field) => {
+        acc[field.name] = field
+
+        return acc
+      }, {})
+    },
     fieldIconsSorted () {
       if (this.fieldTypes.length) {
         return this.fieldTypes.reduce((acc, type) => {
@@ -290,7 +327,7 @@ export default {
     },
     filteredSubmitterDefaultFields () {
       if (this.defaultFieldsSearch) {
-        return this.submitterDefaultFields.filter((f) => f.name.toLowerCase().includes(this.defaultFieldsSearch.toLowerCase()))
+        return this.submitterDefaultFields.filter((f) => (f.title || f.name).toLowerCase().includes(this.defaultFieldsSearch.toLowerCase()))
       } else {
         return this.submitterDefaultFields
       }
@@ -350,6 +387,14 @@ export default {
         (f.conditions || []).forEach((c) => {
           if (c.field_uuid === field.uuid) {
             f.conditions.splice(f.conditions.indexOf(c), 1)
+          }
+        })
+      })
+
+      this.template.schema.forEach((item) => {
+        (item.conditions || []).forEach((c) => {
+          if (c.field_uuid === field.uuid) {
+            item.conditions.splice(item.conditions.indexOf(c), 1)
           }
         })
       })

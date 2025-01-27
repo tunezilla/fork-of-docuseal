@@ -74,7 +74,7 @@
           ID: {{ signature.uuid }}
         </div>
         <div>
-          {{ t('reason') }}: {{ values[field.preferences?.reason_field_uuid] || t('digitally_signed_by') }} {{ submitter.name }}
+          <span v-if="values[field.preferences?.reason_field_uuid]">{{ t('reason') }}: </span>{{ values[field.preferences?.reason_field_uuid] || t('digitally_signed_by') }} {{ submitter.name }}
           <template v-if="submitter.email">
             &lt;{{ submitter.email }}&gt;
           </template>
@@ -168,6 +168,7 @@
     <div
       v-else-if="field.type === 'cells'"
       class="w-full flex items-center"
+      :class="{ 'justify-end': field.preferences?.align === 'right' }"
     >
       <div
         v-for="(char, index) in modelValue"
@@ -196,7 +197,10 @@
       <span v-else-if="field.type === 'date'">
         {{ formattedDate }}
       </span>
-      <span v-else-if="field.type === 'number'">
+      <span
+        v-else-if="field.type === 'number'"
+        class="w-full"
+      >
         {{ formatNumber(modelValue, field.preferences?.format) }}
       </span>
       <span
@@ -209,7 +213,7 @@
 </template>
 
 <script>
-import { IconTextSize, IconWritingSign, IconCalendarEvent, IconPhoto, IconCheckbox, IconPaperclip, IconSelect, IconCircleDot, IconChecks, IconCheck, IconColumns3, IconPhoneCheck, IconLetterCaseUpper, IconCreditCard, IconRubberStamp, IconSquareNumber1 } from '@tabler/icons-vue'
+import { IconTextSize, IconWritingSign, IconCalendarEvent, IconPhoto, IconCheckbox, IconPaperclip, IconSelect, IconCircleDot, IconChecks, IconCheck, IconColumns3, IconPhoneCheck, IconLetterCaseUpper, IconCreditCard, IconRubberStamp, IconSquareNumber1, IconId } from '@tabler/icons-vue'
 
 export default {
   name: 'FieldArea',
@@ -311,7 +315,8 @@ export default {
         cells: this.t('cells'),
         stamp: this.t('stamp'),
         payment: this.t('payment'),
-        phone: this.t('phone')
+        phone: this.t('phone'),
+        verification: this.t('verify_id')
       }
     },
     alignClasses () {
@@ -340,7 +345,8 @@ export default {
         cells: IconColumns3,
         multiple: IconChecks,
         phone: IconPhoneCheck,
-        payment: IconCreditCard
+        payment: IconCreditCard,
+        verification: IconId
       }
     },
     image () {
@@ -444,8 +450,18 @@ export default {
       }
     },
     formatNumber (number, format) {
+      if (!number && number !== 0) {
+        return ''
+      }
+
       if (format === 'comma') {
         return new Intl.NumberFormat('en-US').format(number)
+      } else if (format === 'usd') {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(number)
+      } else if (format === 'gbp') {
+        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(number)
+      } else if (format === 'eur') {
+        return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(number)
       } else if (format === 'dot') {
         return new Intl.NumberFormat('de-DE').format(number)
       } else if (format === 'space') {

@@ -1,4 +1,9 @@
 const en = {
+  party: 'Party',
+  method: 'Method',
+  reorder_fields: 'Reorder fields',
+  verify_id: 'Verify ID',
+  obtain_qualified_electronic_signature_with_the_trusted_provider_click_to_learn_more: 'Obtain qualified electronic signature (QeS) with the trusted provider. Click to learn more.',
   editable: 'Editable',
   recurrent: 'Recurrent',
   one_off: 'One-off',
@@ -46,6 +51,8 @@ const en = {
   cancel: 'Cancel',
   any: 'Any',
   drawn: 'Drawn',
+  drawn_or_typed: 'Drawn or Typed',
+  upload: 'Upload',
   formula: 'Formula',
   typed: 'Typed',
   draw_field_on_the_document: 'Draw a field on the document',
@@ -148,10 +155,17 @@ const en = {
   preferences: 'Preferences',
   available_in_pro: 'Available in Pro',
   some_fields_are_missing_in_the_formula: 'Some fields are missing in the formula.',
-  learn_more: 'Learn more'
+  learn_more: 'Learn more',
+  and: 'and',
+  or: 'or'
 }
 
 const es = {
+  party: 'Parte',
+  method: 'Método',
+  reorder_fields: 'Reordenar campos',
+  verify_id: 'Verificar ID',
+  obtain_qualified_electronic_signature_with_the_trusted_provider_click_to_learn_more: 'Obtenga una firma electrónica cualificada (QeS) con el proveedor de confianza. Haga clic para obtener más información.',
   recurrent: 'Recurrente',
   one_off: 'Único',
   editable: 'Editable',
@@ -283,6 +297,8 @@ const es = {
   add_document: 'Subir',
   any: 'Cualquier',
   drawn: 'Dibujado',
+  drawn_or_typed: 'Dibujado o Escrito',
+  upload: 'Subir',
   typed: 'Escrito',
   none: 'Ninguno',
   ssn: 'SSN',
@@ -301,10 +317,17 @@ const es = {
   preferences: 'Preferencias',
   available_in_pro: 'Disponible en Pro',
   some_fields_are_missing_in_the_formula: 'Faltan algunos campos en la fórmula.',
-  learn_more: 'Aprende más'
+  learn_more: 'Aprende más',
+  and: 'y',
+  or: 'o'
 }
 
 const it = {
+  party: 'Parte',
+  method: 'Metodo',
+  reorder_fields: 'Riordina i campi',
+  verify_id: 'Verifica ID',
+  obtain_qualified_electronic_signature_with_the_trusted_provider_click_to_learn_more: 'Ottieni una firma elettronica qualificata (QeS) con il fornitore di fiducia. Clicca per saperne di più.',
   ricorrente: 'Ricorrente',
   una_volta: 'Una volta',
   editable: 'Modificabile',
@@ -352,6 +375,8 @@ const it = {
   cancel: 'Annulla',
   any: 'Qualsiasi',
   drawn: 'Disegnato',
+  drawn_or_typed: 'Disegnato o Digitato',
+  upload: 'Caricare',
   formula: 'Formula',
   typed: 'Digitato',
   draw_field_on_the_document: 'Disegnare un campo sul documento',
@@ -454,10 +479,17 @@ const it = {
   preferences: 'Preferenze',
   available_in_pro: 'Disponibile in Pro',
   some_fields_are_missing_in_the_formula: 'Alcuni campi mancano nella formula.',
-  learn_more: 'Scopri di più'
+  learn_more: 'Scopri di più',
+  and: 'e',
+  or: 'o'
 }
 
 const pt = {
+  party: 'Parte',
+  method: 'Método',
+  reorder_fields: 'Reorganizar campos',
+  verify_id: 'Verificar ID',
+  obtain_qualified_electronic_signature_with_the_trusted_provider_click_to_learn_more: 'Obtenha a assinatura eletrônica qualificada (QeS) com o provedor confiável. Clique para saber mais.',
   recurrent: 'Recurrente',
   one_off: 'Único',
   editable: 'Editável',
@@ -589,6 +621,8 @@ const pt = {
   add_document: 'Enviar',
   any: 'Qualquer',
   drawn: 'Desenhado',
+  drawn_or_typed: 'Desenhado ou Digitado',
+  upload: 'Carregar',
   typed: 'Digitado',
   none: 'Nenhum',
   ssn: 'SSN',
@@ -607,10 +641,17 @@ const pt = {
   preferences: 'Preferências',
   available_in_pro: 'Disponível no Pro',
   some_fields_are_missing_in_the_formula: 'Faltam alguns campos na fórmula.',
-  learn_more: 'Saiba mais'
+  learn_more: 'Saiba mais',
+  and: 'e',
+  or: 'ou'
 }
 
 const fr = {
+  party: 'Partie',
+  method: 'Méthode',
+  reorder_fields: 'Réorganiser les champs',
+  verify_id: "Vérifier l'ID",
+  obtain_qualified_electronic_signature_with_the_trusted_provider_click_to_learn_more: 'Obtenez une signature électronique qualifiée (QeS) avec le fournisseur de confiance. Cliquez pour en savoir plus.',
   recurrent: 'Récurrent',
   one_off: 'Ponctuel',
   editable: 'Éditable',
@@ -742,6 +783,8 @@ const fr = {
   add_document: 'Télécharger',
   any: 'Tout',
   drawn: 'Dessiné',
+  drawn_or_typed: 'Dessiné ou Tapé',
+  upload: 'Téléverser',
   typed: 'Tapé',
   none: 'Aucun',
   ssn: 'SSN',
@@ -760,10 +803,17 @@ const fr = {
   preferences: 'Préférences',
   available_in_pro: 'Disponible en version Pro',
   some_fields_are_missing_in_the_formula: 'Certains champs manquent dans la formule.',
-  learn_more: 'En savoir plus'
+  learn_more: 'En savoir plus',
+  and: 'et',
+  or: 'ou'
 }
 
 const de = {
+  party: 'Partei',
+  method: 'Verfahren',
+  reorder_fields: 'Felder neu anordnen',
+  verify_id: 'ID überprüfen',
+  obtain_qualified_electronic_signature_with_the_trusted_provider_click_to_learn_more: 'Erhalten Sie eine qualifizierte elektronische Signatur (QeS) beim vertrauenswürdigen Anbieter. Klicken Sie hier, um mehr zu erfahren.',
   wiederkehrend: 'Wiederkehrend',
   einmalig: 'Einmalig',
   editable: 'Bearbeitbar',
@@ -895,6 +945,8 @@ const de = {
   add_document: 'Hochladen',
   any: 'Jede',
   drawn: 'Gezeichnet',
+  drawn_or_typed: 'Gezeichnet oder getippt',
+  upload: 'Upload',
   typed: 'Getippt',
   none: 'Keine',
   ssn: 'SSN',
@@ -913,7 +965,9 @@ const de = {
   preferences: 'Einstellungen',
   available_in_pro: 'In Pro verfügbar',
   some_fields_are_missing_in_the_formula: 'Einige Felder fehlen in der Formel.',
-  learn_more: 'Erfahren Sie mehr'
+  learn_more: 'Erfahren Sie mehr',
+  and: 'und',
+  or: 'oder'
 }
 
 export { en, es, it, pt, fr, de }

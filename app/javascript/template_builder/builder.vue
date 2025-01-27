@@ -1,7 +1,8 @@
 <template>
   <div
     style="max-width: 1600px"
-    class="mx-auto pl-3 md:pl-4 h-full"
+    class="mx-auto pl-3 h-full"
+    :class="isMobile ? 'pl-4' : 'md:pl-4'"
   >
     <div
       v-if="pendingFieldAttachmentUuids.length && editable"
@@ -163,7 +164,7 @@
     <div
       id="main_container"
       class="flex"
-      :class="$slots.buttons || withTitle ? 'md:max-h-[calc(100%_-_60px)]' : 'md:max-h-[100%]'"
+      :class="$slots.buttons || withTitle ? (isMobile ? 'max-h-[calc(100%_-_60px)]' : 'md:max-h-[calc(100%_-_60px)]') : (isMobile ? 'max-h-[100%]' : 'md:max-h-[100%]')"
     >
       <div
         v-if="withDocumentsList"
@@ -178,6 +179,7 @@
           :with-arrows="template.schema.length > 1"
           :item="item"
           :document="sortedDocuments[index]"
+          :data-document-uuid="item.attachment_uuid"
           :accept-file-types="acceptFileTypes"
           :with-replace-button="withUploadButton"
           :editable="editable"
@@ -186,6 +188,7 @@
           @remove="onDocumentRemove"
           @replace="onDocumentReplace"
           @up="moveDocument(item, -1)"
+          @reorder="reorderFields"
           @down="moveDocument(item, 1)"
           @change="save"
         />
@@ -219,7 +222,8 @@
       </div>
       <div
         id="pages_container"
-        class="w-full overflow-y-hidden md:overflow-y-auto overflow-x-hidden mt-0.5 pt-0.5"
+        class="w-full overflow-x-hidden mt-0.5 pt-0.5"
+        :class="isMobile ? 'overflow-y-auto' : 'overflow-y-hidden md:overflow-y-auto'"
       >
         <div
           ref="documents"
@@ -263,6 +267,7 @@
                 :input-mode="inputMode"
                 :default-fields="[...defaultRequiredFields, ...defaultFields]"
                 :allow-draw="!onlyDefinedFields"
+                :data-document-uuid="document.uuid"
                 :default-submitters="defaultSubmitters"
                 :with-field-placeholder="withFieldPlaceholder"
                 :draw-field="drawField"
@@ -320,7 +325,7 @@
         </div>
       </div>
       <div
-        v-if="withFieldsList"
+        v-if="withFieldsList && !isMobile"
         id="fields_list_container"
         class="relative w-80 flex-none mt-1 pr-4 pl-0.5 hidden md:block"
         :class="drawField ? 'overflow-hidden' : 'overflow-y-auto overflow-x-hidden'"
@@ -362,6 +367,7 @@
             :default-submitters="defaultSubmitters"
             :draw-field-type="drawFieldType"
             :default-fields="[...defaultRequiredFields, ...defaultFields]"
+            :template="template"
             :default-required-fields="defaultRequiredFields"
             :field-types="fieldTypes"
             :with-sticky-submitters="withStickySubmitters"
@@ -378,14 +384,14 @@
         </div>
       </div>
     </div>
-    <div class="sticky bottom-0">
+    <div class="sticky bottom-0 z-10">
       <MobileDrawField
-        v-if="drawField && isBreakpointLg"
+        v-if="drawField && (isBreakpointLg || isMobile)"
         :draw-field="drawField"
         :fields="template.fields"
         :submitters="template.submitters"
         :selected-submitter="selectedSubmitter"
-        class="md:hidden"
+        :class="{ 'md:hidden': !isMobile }"
         :editable="editable"
         @cancel="[drawField = null, drawOption = null]"
         @change-submitter="[selectedSubmitter = $event, drawField.submitter_uuid = $event.uuid]"
@@ -396,6 +402,7 @@
         :default-fields="[...defaultRequiredFields, ...defaultFields]"
         :default-required-fields="defaultRequiredFields"
         :field-types="fieldTypes"
+        :class="{ 'md:hidden': !isMobile }"
         :selected-submitter="selectedSubmitter"
         @select="startFieldDraw($event)"
       />
@@ -455,6 +462,7 @@ export default {
       fieldTypes: this.fieldTypes,
       backgroundColor: this.backgroundColor,
       withPhone: this.withPhone,
+      withVerification: this.withVerification,
       withPayment: this.withPayment,
       isPaymentConnected: this.isPaymentConnected,
       withFormula: this.withFormula,
@@ -635,6 +643,11 @@ export default {
       required: false,
       default: false
     },
+    withVerification: {
+      type: Boolean,
+      required: false,
+      default: null
+    },
     withPayment: {
       type: Boolean,
       required: false,
@@ -688,6 +701,11 @@ export default {
     fieldsDragFieldRef: () => ref(),
     language () {
       return this.locale.split('-')[0].toLowerCase()
+    },
+    isMobile () {
+      const isMobileSafariIos = 'ontouchstart' in window && navigator.maxTouchPoints > 0 && /AppleWebKit/i.test(navigator.userAgent)
+
+      return isMobileSafariIos || /android|iphone|ipad/i.test(navigator.userAgent)
     },
     defaultDateFormat () {
       const isUsBrowser = Intl.DateTimeFormat().resolvedOptions().locale.endsWith('-US')
@@ -756,13 +774,17 @@ export default {
       }
     })
 
+    const defineSubmittersUuids = this.defineSubmitters.map((name) => {
+      return this.template.submitters.find(e => e.name === name)?.uuid
+    })
+
     this.defineSubmitters.forEach((name, index) => {
       const submitter = (this.template.submitters[index] ||= {})
 
       submitter.name = name || this.submitterDefaultNames[index]
 
-      if (existingSubmittersUuids.filter(Boolean).length) {
-        submitter.uuid = existingSubmittersUuids[index] || submitter.uuid || v4()
+      if (defineSubmittersUuids.filter(Boolean).length || existingSubmittersUuids.filter(Boolean).length) {
+        submitter.uuid = defineSubmittersUuids[index] || existingSubmittersUuids[index] || submitter.uuid || v4()
       } else {
         submitter.uuid ||= v4()
       }
@@ -805,6 +827,89 @@ export default {
     this.documentRefs = []
   },
   methods: {
+    reorderFields (item) {
+      const itemFields = []
+      const fields = []
+      const fieldAreasIndex = {}
+
+      const attachmentUuids = this.template.schema.map((e) => e.attachment_uuid)
+
+      this.template.fields.forEach((f) => {
+        if (f.areas?.length) {
+          const firstArea = f.areas.reduce((min, a) => {
+            return attachmentUuids.indexOf(a.attachment_uuid) < attachmentUuids.indexOf(min.attachment_uuid) ? a : min
+          }, f.areas[0])
+
+          if (firstArea.attachment_uuid === item.attachment_uuid) {
+            itemFields.push(f)
+          } else {
+            fields.push(f)
+          }
+        } else {
+          fields.push(f)
+        }
+      })
+
+      const sortArea = (aArea, bArea) => {
+        if (aArea.attachment_uuid === bArea.attachment_uuid) {
+          if (aArea.page === bArea.page) {
+            if (Math.abs(aArea.y - bArea.y) < 0.01) {
+              if (aArea.x === bArea.x) {
+                return 0
+              } else {
+                return aArea.x - bArea.x
+              }
+            } else {
+              return aArea.y - bArea.y
+            }
+          } else {
+            return aArea.page - bArea.page
+          }
+        } else {
+          return attachmentUuids.indexOf(aArea.attachment_uuid) - attachmentUuids.indexOf(bArea.attachment_uuid)
+        }
+      }
+
+      itemFields.sort((aField, bField) => {
+        const aArea = (fieldAreasIndex[aField.uuid] ||= [...(aField.areas || [])].sort(sortArea)[0])
+        const bArea = (fieldAreasIndex[bField.uuid] ||= [...(bField.areas || [])].sort(sortArea)[0])
+
+        return sortArea(aArea, bArea)
+      })
+
+      const insertBeforeAttachmentUuids = attachmentUuids.slice(this.template.schema.indexOf(item) + 1)
+
+      let sortedFields = []
+
+      if (insertBeforeAttachmentUuids.length) {
+        const insertAfterField = fields.find((f) => {
+          if (f.areas?.length) {
+            return f.areas.find((a) => insertBeforeAttachmentUuids.includes(a.attachment_uuid))
+          } else {
+            return false
+          }
+        })
+
+        if (insertAfterField) {
+          fields.splice(fields.indexOf(insertAfterField), 0, ...itemFields)
+
+          sortedFields = fields
+        } else {
+          sortedFields = fields.concat(itemFields)
+        }
+      } else {
+        if (fields.length && itemFields.length && this.template.fields.indexOf(fields[0]) > this.template.fields.indexOf(itemFields[0])) {
+          sortedFields = itemFields.concat(fields)
+        } else {
+          sortedFields = fields.concat(itemFields)
+        }
+      }
+
+      if (this.template.fields.length === sortedFields.length) {
+        this.template.fields = sortedFields
+        this.save()
+      }
+    },
     closeDropdown () {
       document.activeElement.blur()
     },
@@ -1017,6 +1122,22 @@ export default {
 
       if (!field.areas.length) {
         this.template.fields.splice(this.template.fields.indexOf(field), 1)
+
+        this.template.fields.forEach((f) => {
+          (f.conditions || []).forEach((c) => {
+            if (c.field_uuid === field.uuid) {
+              f.conditions.splice(f.conditions.indexOf(c), 1)
+            }
+          })
+        })
+
+        this.template.schema.forEach((item) => {
+          (item.conditions || []).forEach((c) => {
+            if (c.field_uuid === field.uuid) {
+              item.conditions.splice(item.conditions.indexOf(c), 1)
+            }
+          })
+        })
       }
 
       this.save()
@@ -1075,7 +1196,7 @@ export default {
       } else if (type === 'image') {
         area.w = pageMask.clientWidth / 5 / pageMask.clientWidth
         area.h = (pageMask.clientWidth / 5 / pageMask.clientWidth) * (pageMask.clientWidth / pageMask.clientHeight)
-      } else if (type === 'signature' || type === 'stamp') {
+      } else if (type === 'signature' || type === 'stamp' || type === 'verification') {
         area.w = pageMask.clientWidth / 5 / pageMask.clientWidth
         area.h = (pageMask.clientWidth / 5 / pageMask.clientWidth) * (pageMask.clientWidth / pageMask.clientHeight) / 2
       } else if (type === 'initials') {
@@ -1199,7 +1320,11 @@ export default {
 
       if (!this.fieldsDragFieldRef.value) {
         if (['select', 'multiple', 'radio'].includes(field.type)) {
-          field.options = [{ value: '', uuid: v4() }]
+          if (this.dragField?.options?.length) {
+            field.options = this.dragField.options.map(option => ({ value: option, uuid: v4() }))
+          } else {
+            field.options = [{ value: '', uuid: v4() }]
+          }
         }
 
         if (['stamp', 'heading'].includes(field.type)) {
@@ -1239,7 +1364,7 @@ export default {
             w: area.maskW / 5 / area.maskW,
             h: (area.maskW / 5 / area.maskW) * (area.maskW / area.maskH)
           }
-        } else if (field.type === 'signature' || field.type === 'stamp') {
+        } else if (field.type === 'signature' || field.type === 'stamp' || field.type === 'verification') {
           baseArea = {
             w: area.maskW / 5 / area.maskW,
             h: (area.maskW / 5 / area.maskW) * (area.maskW / area.maskH) / 2
@@ -1275,6 +1400,16 @@ export default {
         fieldArea.h = lastArea.h
       }
 
+      if (field.width) {
+        fieldArea.w = field.width / area.maskW
+        delete field.width
+      }
+
+      if (field.height) {
+        fieldArea.h = field.height / area.maskH
+        delete field.height
+      }
+
       field.areas.push(fieldArea)
 
       this.selectedAreaRef.value = fieldArea
@@ -1291,6 +1426,8 @@ export default {
         this.$nextTick(() => {
           const documentRef = this.documentRefs.find((e) => e.document.uuid === area.attachment_uuid)
           const areaRef = documentRef.pageRefs[area.page].areaRefs.find((ref) => ref.area === this.selectedAreaRef.value)
+
+          areaRef.isHeadingSelected = true
 
           areaRef.focusValueInput()
         })
@@ -1379,29 +1516,29 @@ export default {
     onDocumentRemove (item) {
       if (window.confirm(this.t('are_you_sure_'))) {
         this.template.schema.splice(this.template.schema.indexOf(item), 1)
-      }
 
-      const removedFieldUuids = []
+        const removedFieldUuids = []
 
-      this.template.fields.forEach((field) => {
-        [...(field.areas || [])].forEach((area) => {
-          if (area.attachment_uuid === item.attachment_uuid) {
-            field.areas.splice(field.areas.indexOf(area), 1)
+        this.template.fields.forEach((field) => {
+          [...(field.areas || [])].forEach((area) => {
+            if (area.attachment_uuid === item.attachment_uuid) {
+              field.areas.splice(field.areas.indexOf(area), 1)
 
-            removedFieldUuids.push(field.uuid)
-          }
+              removedFieldUuids.push(field.uuid)
+            }
+          })
         })
-      })
 
-      this.template.fields =
-        this.template.fields.filter((f) => !removedFieldUuids.includes(f.uuid) || f.areas?.length)
+        this.template.fields =
+          this.template.fields.filter((f) => !removedFieldUuids.includes(f.uuid) || f.areas?.length)
 
-      this.save()
+        this.save()
+      }
     },
     onDocumentReplace (data) {
       const { replaceSchemaItem, schema, documents } = data
 
-      this.template.schema.splice(this.template.schema.indexOf(replaceSchemaItem), 1, schema[0])
+      this.template.schema.splice(this.template.schema.indexOf(replaceSchemaItem), 1, { ...replaceSchemaItem, ...schema[0] })
       this.template.documents.push(...documents)
 
       if (data.fields) {

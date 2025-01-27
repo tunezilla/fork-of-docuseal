@@ -57,6 +57,8 @@ class Submission < ApplicationRecord
 
   has_many_attached :preview_documents
 
+  has_many :template_accesses, primary_key: :template_id, foreign_key: :template_id, dependent: nil, inverse_of: false
+
   has_many :template_schema_documents,
            ->(e) { where(uuid: (e.template_schema.presence || e.template.schema).pluck('attachment_uuid')) },
            through: :template, source: :documents_attachments
@@ -67,6 +69,8 @@ class Submission < ApplicationRecord
     where.not(Submitter.where(Submitter.arel_table[:submission_id].eq(Submission.arel_table[:id])
      .and(Submitter.arel_table[:completed_at].eq(nil))).select(1).arel.exists)
   }
+  scope :declined, -> { joins(:submitters).where.not(submitters: { declined_at: nil }).group(:id) }
+  scope :expired, -> { where(expire_at: ..Time.current) }
 
   enum :source, {
     invite: 'invite',

@@ -42,6 +42,8 @@ module Submissions
 
     # rubocop:disable Metrics
     def call(submitter)
+      return generate_detached_signature_attachments(submitter) if detached_signature?(submitter)
+
       pdfs_index = generate_pdfs(submitter)
 
       template = submitter.submission.template
@@ -54,8 +56,10 @@ module Submissions
       original_documents = template.documents.preload(:blob)
 
       result_attachments =
-        submitter.submission.template_schema.map do |item|
+        submitter.submission.template_schema.filter_map do |item|
           pdf = pdfs_index[item['attachment_uuid']]
+
+          next if pdf.nil?
 
           if original_documents.find { |a| a.uuid == item['attachment_uuid'] }.image?
             pdf = normalize_image_pdf(pdf)
@@ -143,15 +147,18 @@ module Submissions
       fill_submitter_fields(submitter, submitter.account, pdfs_index, with_signature_id:, is_flatten:)
     end
 
-    def fill_submitter_fields(submitter, account, pdfs_index, with_signature_id:, is_flatten:)
+    def fill_submitter_fields(submitter, account, pdfs_index, with_signature_id:, is_flatten:, with_headings: nil)
       cell_layouter = HexaPDF::Layout::TextLayouter.new(text_valign: :center, text_align: :center)
 
       attachments_data_cache = {}
 
       return pdfs_index if submitter.submission.template_fields.blank?
 
+      with_headings = find_last_submitter(submitter.submission, submitter:).blank? if with_headings.nil?
+
       submitter.submission.template_fields.each do |field|
-        next if field['submitter_uuid'] != submitter.uuid
+        next if field['type'] == 'heading' && !with_headings
+        next if field['submitter_uuid'] != submitter.uuid && field['type'] != 'heading'
 
         field.fetch('areas', []).each do |area|
           pdf = pdfs_index[area['attachment_uuid']]
@@ -184,6 +191,7 @@ module Submissions
           font = pdf.fonts.add(field.dig('preferences', 'font').presence || FONT_NAME)
 
           value = submitter.values[field['uuid']]
+          value = field['default_value'] if field['type'] == 'heading'
 
           text_align = field.dig('preferences', 'align').to_s.to_sym.presence ||
                        (value.to_s.match?(RTL_REGEXP) ? :right : :left)
@@ -232,7 +240,7 @@ module Submissions
 
             reason_string =
               I18n.with_locale(submitter.account.locale) do
-                "#{I18n.t('reason')}: #{reason_value || I18n.t('digitally_signed_by')} " \
+                "#{reason_value ? "#{I18n.t('reason')}: " : ''}#{reason_value || I18n.t('digitally_signed_by')} " \
                   "#{submitter.name}#{submitter.email.present? ? " <#{submitter.email}>" : ''}\n" \
                   "#{I18n.l(attachment.created_at.in_time_zone(submitter.account.timezone), format: :long)} " \
                   "#{TimeUtils.timezone_abbr(submitter.account.timezone, attachment.created_at)}"
@@ -378,7 +386,10 @@ module Submissions
           when ->(type) { type == 'cells' && !area['cell_w'].to_f.zero? }
             cell_width = area['cell_w'] * width
 
-            TextUtils.maybe_rtl_reverse(value).chars.each_with_index do |char, index|
+            chars = TextUtils.maybe_rtl_reverse(value).chars
+            chars = chars.reverse if field.dig('preferences', 'align') == 'right'
+
+            chars.each_with_index do |char, index|
               next if char.blank?
 
               text = HexaPDF::Layout::TextFragment.create(char, font:,
@@ -405,9 +416,15 @@ module Submissions
                 line_height = layouter.fit([text], cell_width, height).lines.first.height
               end
 
+              x =
+                if field.dig('preferences', 'align') == 'right'
+                  ((area['x'] + area['w']) * width) - (cell_width * (index + 1))
+                else
+                  (area['x'] * width) + (cell_width * index)
+                end
+
               cell_layouter.fit([text], cell_width, [line_height, area['h'] * height].max)
-                           .draw(canvas, ((area['x'] * width) + (cell_width * index)),
-                                 height - (area['y'] * height))
+                           .draw(canvas, x, height - (area['y'] * height))
             end
           else
             if field['type'] == 'date'
@@ -474,7 +491,7 @@ module Submissions
 
       sign_reason = fetch_sign_reason(submitter)
 
-      if sign_reason
+      if sign_reason && pkcs
         sign_params = {
           reason: sign_reason,
           **build_signing_params(submitter, pkcs, tsa_url)
@@ -543,7 +560,15 @@ module Submissions
       documents   = latest_submitter&.documents&.preload(:blob).to_a.presence
       documents ||= submission.template_schema_documents.preload(:blob)
 
-      documents.to_h do |attachment|
+      attachment_uuids = Submissions.filtered_conditions_schema(submission).pluck('attachment_uuid')
+      attachments_index = documents.index_by { |a| a.metadata['original_uuid'] || a.uuid }
+
+      attachment_uuids.each_with_object({}) do |uuid, acc|
+        attachment = attachments_index[uuid]
+        attachment ||= submission.template_schema_documents.preload(:blob).find { |a| a.uuid == uuid }
+
+        next unless attachment
+
         pdf =
           if attachment.image?
             build_pdf_from_image(attachment)
@@ -553,21 +578,21 @@ module Submissions
 
         pdf = maybe_rotate_pdf(pdf)
 
-        if flatten
-          begin
-            pdf.acro_form.create_appearances(force: true) if pdf.acro_form && pdf.acro_form[:NeedAppearances]
-            pdf.acro_form&.flatten
-          rescue HexaPDF::MissingGlyphError
-            nil
-          rescue StandardError => e
-            Rollbar.error(e) if defined?(Rollbar)
-          end
-        end
+        maybe_flatten_pdf(pdf) if flatten
 
         pdf.config['font.on_missing_glyph'] = method(:on_missing_glyph).to_proc
 
-        [attachment.metadata['original_uuid'] || attachment.uuid, pdf]
+        acc[uuid] = pdf
       end
+    end
+
+    def maybe_flatten_pdf(pdf)
+      pdf.acro_form.create_appearances(force: true) if pdf.acro_form && pdf.acro_form[:NeedAppearances]
+      pdf.acro_form&.flatten
+    rescue HexaPDF::MissingGlyphError
+      nil
+    rescue StandardError => e
+      Rollbar.error(e) if defined?(Rollbar)
     end
 
     def maybe_rotate_pdf(pdf)
@@ -673,6 +698,14 @@ module Submissions
 
     def info_creator
       "#{Docuseal.product_name} (#{Docuseal::PRODUCT_URL})"
+    end
+
+    def detached_signature?(_submitter)
+      false
+    end
+
+    def generate_detached_signature_attachments(_submitter)
+      []
     end
 
     def h

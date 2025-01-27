@@ -1,4 +1,7 @@
 const en = {
+  complete_all_required_fields_to_proceed_with_identity_verification: 'Complete all required fields to proceed with identity verification.',
+  verify_id: 'Verify ID',
+  identity_verification: 'Identity verification',
   complete: 'Complete',
   fill_all_required_fields_to_complete: 'Fill all required fields to complete',
   sign_and_complete: 'Sign and Complete',
@@ -90,10 +93,14 @@ const en = {
   reupload: 'Reupload',
   upload: 'Upload',
   files: 'Files',
-  signature_is_too_small_please_redraw: 'Signature is too small. Please redraw.'
+  signature_is_too_small_please_redraw: 'Signature is too small. Please redraw.',
+  wait_countdown_seconds: 'Wait {countdown} seconds'
 }
 
 const es = {
+  complete_all_required_fields_to_proceed_with_identity_verification: 'Complete todos los campos requeridos para continuar con la verificación de identidad.',
+  verify_id: 'Verificar ID',
+  identity_verification: 'Verificación de identidad',
   complete: 'Completar',
   fill_all_required_fields_to_complete: 'Complete todos los campos requeridos para finalizar',
   sign_and_complete: 'Firmar y Completar',
@@ -184,10 +191,14 @@ const es = {
   reupload: 'Volver a subir',
   upload: 'Subir',
   files: 'Archivos',
-  signature_is_too_small_please_redraw: 'La firma es demasiado pequeña. Por favor, dibújala de nuevo.'
+  signature_is_too_small_please_redraw: 'La firma es demasiado pequeña. Por favor, dibújala de nuevo.',
+  wait_countdown_seconds: 'Espera {countdown} segundos'
 }
 
 const it = {
+  complete_all_required_fields_to_proceed_with_identity_verification: "Compila tutti i campi obbligatori per procedere con la verifica dell'identità.",
+  verify_id: 'Verifica ID',
+  identity_verification: "Verifica dell'identità",
   complete: 'Completa',
   fill_all_required_fields_to_complete: 'Compila tutti i campi obbligatori per completare',
   sign_and_complete: 'Firma e Completa',
@@ -278,10 +289,14 @@ const it = {
   reupload: 'Ricarica',
   upload: 'Carica',
   files: 'File',
-  signature_is_too_small_please_redraw: 'La firma è troppo piccola. Ridisegnala per favore.'
+  signature_is_too_small_please_redraw: 'La firma è troppo piccola. Ridisegnala per favore.',
+  wait_countdown_seconds: 'Attendi {countdown} secondi'
 }
 
 const de = {
+  complete_all_required_fields_to_proceed_with_identity_verification: 'Vervollständigen Sie alle erforderlichen Felder, um mit der Identitätsverifizierung fortzufahren.',
+  verify_id: 'ID überprüfen',
+  identity_verification: 'Identitätsüberprüfung',
   complete: 'Abschließen',
   fill_all_required_fields_to_complete: 'Alle erforderlichen Felder ausfüllen, um abzuschließen',
   sign_and_complete: 'Signieren und Abschließen',
@@ -372,10 +387,14 @@ const de = {
   reupload: 'Erneut hochladen',
   upload: 'Hochladen',
   files: 'Dateien',
-  signature_is_too_small_please_redraw: 'Die Unterschrift ist zu klein. Bitte erneut zeichnen.'
+  signature_is_too_small_please_redraw: 'Die Unterschrift ist zu klein. Bitte erneut zeichnen.',
+  wait_countdown_seconds: 'Warte {countdown} Sekunden'
 }
 
 const fr = {
+  complete_all_required_fields_to_proceed_with_identity_verification: "Veuillez remplir tous les champs obligatoires pour continuer la vérification de l'identité.",
+  verif_id: "Vérification de l'ID",
+  verif_identite: "Vérification de l'identité",
   complete: 'Terminer',
   fill_all_required_fields_to_complete: 'Veuillez remplir tous les champs obligatoires pour compléter',
   sign_and_complete: 'Signer et Terminer',
@@ -466,10 +485,14 @@ const fr = {
   reupload: 'Recharger',
   upload: 'Télécharger',
   files: 'Fichiers',
-  signature_is_too_small_please_redraw: 'La signature est trop petite. Veuillez la redessiner.'
+  signature_is_too_small_please_redraw: 'La signature est trop petite. Veuillez la redessiner.',
+  wait_countdown_seconds: 'Attendez {countdown} secondes'
 }
 
 const pl = {
+  complete_all_required_fields_to_proceed_with_identity_verification: 'Uzupełnij wszystkie wymagane pola, aby kontynuować weryfikację tożsamości.',
+  verify_id: 'Zweryfikuj ID',
+  identity_verification: 'Weryfikacja tożsamości',
   complete: 'Zakończ',
   fill_all_required_fields_to_complete: 'Uzupełnij wszystkie wymagane pola, aby zakończyć',
   sign_and_complete: 'Podpisz i zakończ',
@@ -564,6 +587,9 @@ const pl = {
 }
 
 const uk = {
+  complete_all_required_fields_to_proceed_with_identity_verification: "Заповніть всі обов'язкові поля, щоб продовжити перевірку особи.",
+  verify_id: 'Підтвердження ідентичності',
+  identity_verification: 'Ідентифікація особи',
   complete: 'Завершити',
   fill_all_required_fields_to_complete: "Заповніть всі обов'язкові поля для завершення",
   sign_and_complete: 'Підписати і завершити',
@@ -654,10 +680,14 @@ const uk = {
   reupload: 'Перезавантажити',
   upload: 'Завантажити',
   files: 'Файли',
-  signature_is_too_small_please_redraw: 'Підпис занадто малий. Будь ласка, перемалюйте його.'
+  signature_is_too_small_please_redraw: 'Підпис занадто малий. Будь ласка, перемалюйте його.',
+  wait_countdown_seconds: 'Зачекайте {countdown} секунд'
 }
 
 const cs = {
+  complete_all_required_fields_to_proceed_with_identity_verification: 'Vyplňte všechna povinná pole, abyste mohli pokračovat v ověření identity.',
+  verify_id: 'Ověřit ID',
+  identity_verification: 'Ověření identity',
   complete: 'Dokončit',
   fill_all_required_fields_to_complete: 'Please complete all mandatory fields',
   sign_and_complete: 'Podepsat a dokončit',
@@ -748,12 +778,16 @@ const cs = {
   reupload: 'Znovu nahrát',
   upload: 'Nahrát',
   files: 'Soubory',
-  signature_is_too_small_please_redraw: 'Podpis je příliš malý. Prosím, překreslete ho.'
+  signature_is_too_small_please_redraw: 'Podpis je příliš malý. Prosím, překreslete ho.',
+  wait_countdown_seconds: 'Počkejte {countdown} sekund'
 }
 
 const pt = {
+  complete_all_required_fields_to_proceed_with_identity_verification: 'Preencha todos os campos obrigatórios para prosseguir com a verificação de identidade.',
+  verify_id: 'Verificar ID',
+  identity_verification: 'Verificação de identidade',
   complete: 'Completar',
-  preencher_todos_os_campos_obrigatórios_para_concluir: 'Preencher todos os campos obrigatórios para concluir',
+  fill_all_required_fields_to_complete: 'Preencher todos os campos obrigatórios para concluir',
   sign_and_complete: 'Assinar e Completar',
   invite: 'Convidar',
   email: 'E-mail',
@@ -842,10 +876,14 @@ const pt = {
   reupload: 'Reenviar',
   upload: 'Carregar',
   files: 'Arquivos',
-  signature_is_too_small_please_redraw: 'A assinatura é muito pequena. Por favor, redesenhe-a.'
+  signature_is_too_small_please_redraw: 'A assinatura é muito pequena. Por favor, redesenhe-a.',
+  wait_countdown_seconds: 'Aguarde {countdown} segundos'
 }
 
 const he = {
+  complete_all_required_fields_to_proceed_with_identity_verification: 'מלא את כל השדות הנדרשים כדי להמשיך עם אימות זהות.',
+  verify_id: 'אמת מזהה',
+  identity_verification: 'אימות זהות',
   complete: 'השלם',
   fill_all_required_fields_to_complete: 'נא למלא את כל השדות הנדרשים להשלמה',
   sign_and_complete: 'חתום והשלם',
@@ -937,12 +975,16 @@ const he = {
   reupload: 'העלה שוב',
   upload: 'העלאה',
   files: 'קבצים',
-  signature_is_too_small_please_redraw: 'החתימה קטנה מדי. אנא צייר מחדש.'
+  signature_is_too_small_please_redraw: 'החתימה קטנה מדי. אנא צייר מחדש.',
+  wait_countdown_seconds: 'המתן {countdown} שניות'
 }
 
 const nl = {
+  complete_all_required_fields_to_proceed_with_identity_verification: 'Vul alle verplichte velden in om door te gaan met de identiteitsverificatie.',
+  verify_id: 'Verifiëren ID',
+  identity_verification: 'Identiteitsverificatie',
   complete: 'Voltooien',
-  vul_alle_verplichte_velden_in_om_te_voltooien: 'Vul alle verplichte velden in om te voltooien',
+  fill_all_required_fields_to_complete: 'Vul alle verplichte velden in om te voltooien',
   sign_and_complete: 'Ondertekenen en voltooien',
   invite: 'Uitnodigen',
   email: 'E-mail',
@@ -1032,10 +1074,14 @@ const nl = {
   reupload: 'Opnieuw uploaden',
   upload: 'Uploaden',
   files: 'Bestanden',
-  signature_is_too_small_please_redraw: 'De handtekening is te klein. Teken deze opnieuw, alstublieft.'
+  signature_is_too_small_please_redraw: 'De handtekening is te klein. Teken deze opnieuw, alstublieft.',
+  wait_countdown_seconds: 'Wacht {countdown} seconden'
 }
 
 const ar = {
+  complete_all_required_fields_to_proceed_with_identity_verification: 'أكمل جميع الحقول المطلوبة للمتابعة في التحقق من الهوية.',
+  verify_id: 'تحقق من الهوية',
+  identity_verification: 'التحقق من الهوية',
   complete: 'اكتمال',
   fill_all_required_fields_to_complete: 'يرجى ملء جميع الحقول المطلوبة لإكمال',
   sign_and_complete: 'التوقيع والاكتمال',
@@ -1126,10 +1172,14 @@ const ar = {
   reupload: 'إعادة التحميل',
   upload: 'تحميل',
   files: 'الملفات',
-  signature_is_too_small_please_redraw: 'التوقيع صغير جدًا. يرجى إعادة الرسم.'
+  signature_is_too_small_please_redraw: 'التوقيع صغير جدًا. يرجى إعادة الرسم.',
+  wait_countdown_seconds: 'انتظر {countdown} ثانية'
 }
 
 const ko = {
+  complete_all_required_fields_to_proceed_with_identity_verification: '신원 확인을 진행하려면 모든 필수 필드를 작성하십시오.',
+  verify_id: '아이디 확인',
+  identity_verification: '신원 확인',
   complete: '완료',
   fill_all_required_fields_to_complete: '모든 필수 필드를 작성하여 완료하세요',
   sign_and_complete: '서명하고 완료하기',
@@ -1219,7 +1269,8 @@ const ko = {
   reupload: '다시 업로드',
   upload: '업로드',
   files: '파일',
-  signature_is_too_small_please_redraw: '서명이 너무 작습니다. 다시 그려주세요.'
+  signature_is_too_small_please_redraw: '서명이 너무 작습니다. 다시 그려주세요.',
+  wait_countdown_seconds: '{countdown}초 기다리세요'
 }
 
 const i18n = { en, es, it, de, fr, pl, uk, cs, pt, he, nl, ar, ko }

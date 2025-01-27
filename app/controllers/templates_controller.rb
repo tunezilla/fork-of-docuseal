@@ -9,18 +9,19 @@ class TemplatesController < ApplicationController
     submissions = @template.submissions.accessible_by(current_ability)
     submissions = submissions.active if @template.archived_at.blank?
     submissions = Submissions.search(submissions, params[:q], search_values: true)
-    submissions = Submissions::Filter.call(submissions, current_user, params)
+    submissions = Submissions::Filter.call(submissions, current_user, params.except(:status))
 
     @base_submissions = submissions
 
-    submissions = submissions.pending if params[:status] == 'pending'
-    submissions = submissions.completed if params[:status] == 'completed'
+    submissions = Submissions::Filter.filter_by_status(submissions, params)
 
     submissions = if params[:completed_at_from].present? || params[:completed_at_to].present?
                     submissions.order(Submitter.arel_table[:completed_at].maximum.desc)
                   else
                     submissions.order(id: :desc)
                   end
+
+    submissions = submissions.preload(:template_accesses) unless current_user.role.in?(%w[admin superadmin])
 
     @pagy, @submissions = pagy(submissions.preload(submitters: :start_form_submission_events))
   rescue ActiveRecord::RecordNotFound
@@ -91,7 +92,7 @@ class TemplatesController < ApplicationController
 
   def destroy
     notice =
-      if params[:permanently].present?
+      if params[:permanently].in?(['true', true])
         @template.destroy!
 
         I18n.t('template_has_been_removed')
@@ -109,13 +110,13 @@ class TemplatesController < ApplicationController
   def template_params
     params.require(:template).permit(
       :name,
-      { schema: [%i[attachment_uuid name]],
-        submitters: [%i[name uuid is_requester linked_to_uuid invite_by_uuid email]],
+      { schema: [[:attachment_uuid, :name, { conditions: [%i[field_uuid value action operation]] }]],
+        submitters: [%i[name uuid is_requester linked_to_uuid invite_by_uuid optional_invite_by_uuid email]],
         fields: [[:uuid, :submitter_uuid, :name, :type,
                   :required, :readonly, :default_value,
                   :title, :description,
                   { preferences: {},
-                    conditions: [%i[field_uuid value action]],
+                    conditions: [%i[field_uuid value action operation]],
                     options: [%i[value uuid]],
                     validation: %i[message pattern],
                     areas: [%i[x y w h cell_w attachment_uuid option_uuid page]] }]] }

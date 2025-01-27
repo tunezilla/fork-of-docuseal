@@ -106,8 +106,11 @@ class SubmitterMailer < ApplicationMailer
 
     @email_config = AccountConfigs.find_for_account(@current_account, AccountConfig::SUBMITTER_DOCUMENTS_COPY_EMAIL_KEY)
 
-    @documents = add_completed_email_attachments!(
-      submitter, with_audit_log: @submitter.template.preferences['documents_copy_email_attach_audit'] != false &&
+    add_completed_email_attachments!(
+      submitter,
+      with_documents: @submitter.template.preferences['documents_copy_email_attach_documents'] != false &&
+                                 (@email_config.nil? || @email_config.value['attach_documents'] != false),
+      with_audit_log: @submitter.template.preferences['documents_copy_email_attach_audit'] != false &&
                                  (@email_config.nil? || @email_config.value['attach_audit_log'] != false)
     )
 
@@ -118,7 +121,7 @@ class SubmitterMailer < ApplicationMailer
     @body ||= @email_config.value['body'] if @email_config
 
     assign_message_metadata('submitter_documents_copy', @submitter)
-    reply_to = build_submitter_reply_to(submitter)
+    reply_to = build_submitter_reply_to(submitter, email_config: @email_config, documents_copy_email: true)
 
     I18n.with_locale(@current_account.locale) do
       subject =
@@ -137,8 +140,10 @@ class SubmitterMailer < ApplicationMailer
 
   private
 
-  def build_submitter_reply_to(submitter)
+  def build_submitter_reply_to(submitter, email_config: nil, documents_copy_email: nil)
     reply_to = submitter.preferences['reply_to'].presence
+    reply_to ||= submitter.template.preferences['documents_copy_email_reply_to'].presence if documents_copy_email
+    reply_to ||= email_config.value['reply_to'].presence if email_config
 
     if reply_to.blank? && (submitter.submission.created_by_user || submitter.template.author)&.email != submitter.email
       reply_to = (submitter.submission.created_by_user || submitter.template.author)&.friendly_name&.sub(/\+\w+@/, '@')

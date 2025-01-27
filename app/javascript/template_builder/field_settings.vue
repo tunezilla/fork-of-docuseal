@@ -27,7 +27,34 @@
     </label>
   </div>
   <div
-    v-if="['number'].includes(field.type)"
+    v-if="field.type === 'verification'"
+    class="py-1.5 px-1 relative"
+    @click.stop
+  >
+    <select
+      :placeholder="t('method')"
+      class="select select-bordered select-xs font-normal w-full max-w-xs !h-7 !outline-0 bg-transparent"
+      @change="[field.preferences ||= {}, field.preferences.method = $event.target.value, save()]"
+    >
+      <option
+        v-for="method in ['QeS', 'AeS']"
+        :key="method"
+        :value="method.toLowerCase()"
+        :selected="method.toLowerCase() === field.preferences?.method || (method === 'QeS' && !field.preferences?.method)"
+      >
+        {{ method }}
+      </option>
+    </select>
+    <label
+      :style="{ backgroundColor }"
+      class="absolute -top-1 left-2.5 px-1 h-4"
+      style="font-size: 8px"
+    >
+      {{ t('method') }}
+    </label>
+  </div>
+  <div
+    v-if="['number', 'cells'].includes(field.type)"
     class="py-1.5 px-1 relative"
     @click.stop
   >
@@ -36,7 +63,7 @@
       @change="[field.preferences ||= {}, field.preferences.align = $event.target.value, save()]"
     >
       <option
-        v-for="value in ['left', 'right', 'center']"
+        v-for="value in ['left', 'right', field.type === 'cells' ? null : 'center'].filter(Boolean)"
         :key="value"
         :selected="field.preferences?.align ? value === field.preferences.align : value === 'left'"
         :value="value"
@@ -212,16 +239,12 @@
         {{ t('any') }}
       </option>
       <option
-        value="drawn"
-        :selected="field.preferences?.format === 'drawn'"
+        v-for="type in ['drawn', 'typed', 'drawn_or_typed', 'upload']"
+        :key="type"
+        :value="type"
+        :selected="field.preferences?.format === type"
       >
-        {{ t('drawn') }}
-      </option>
-      <option
-        value="typed"
-        :selected="field.preferences?.format === 'typed'"
-      >
-        {{ t('typed') }}
+        {{ t(type) }}
       </option>
     </select>
     <label
@@ -233,14 +256,14 @@
     </label>
   </div>
   <li
-    v-if="withRequired && field.type != 'phone' && field.type != 'stamp'"
+    v-if="withRequired && field.type !== 'phone' && field.type !== 'stamp' && field.type !== 'verification'"
     @click.stop
   >
     <label class="cursor-pointer py-1.5">
       <input
         v-model="field.required"
         type="checkbox"
-        :disabled="!editable || defaultField"
+        :disabled="!editable || (defaultField && [true, false].includes(defaultField.required))"
         class="toggle toggle-xs"
         @update:model-value="save"
       >
@@ -465,6 +488,9 @@ export default {
     numberFormats () {
       return [
         'none',
+        'usd',
+        'eur',
+        'gbp',
         'comma',
         'dot',
         'space'
@@ -545,6 +571,12 @@ export default {
     formatNumber (number, format) {
       if (format === 'comma') {
         return new Intl.NumberFormat('en-US').format(number)
+      } else if (format === 'usd') {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(number)
+      } else if (format === 'gbp') {
+        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(number)
+      } else if (format === 'eur') {
+        return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(number)
       } else if (format === 'dot') {
         return new Intl.NumberFormat('de-DE').format(number)
       } else if (format === 'space') {
